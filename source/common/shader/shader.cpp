@@ -21,25 +21,54 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
     file.close();
 
     //TODO: Complete this function
+    GLuint shader = glCreateShader(type); 
+    // assigning the source code to the shader and compiling it
+    glShaderSource(shader, 1, &sourceCStr, nullptr);
+    glCompileShader(shader);
+
     //Note: The function "checkForShaderCompilationErrors" checks if there is
     // an error in the given shader. You should use it to check if there is a
     // compilation error and print it so that you can know what is wrong with
     // the shader. The returned string will be empty if there is no errors.
-
+    std::string Error= checkForShaderCompilationErrors(shader);
     //We return true if the compilation succeeded
-    return true;
+    if(Error==std::string())
+    {
+        // creating the shader program
+        ShaderProgram();
+        glAttachShader(program, shader);// we only attach the shader if there was no errors in compilation
+        return true;
+    }
+    else
+    {
+        std::cerr<<"ERROR IN COMPILATION: "<< Error<< std::endl;// outputing the error message
+        return false;
+    }
 }
 
 
 
 bool our::ShaderProgram::link() const {
     //TODO: Complete this function
+    glLinkProgram(program);
+    GLuint vertex_array;
+    glCreateVertexArrays(1, &vertex_array);
+    glBindVertexArray(vertex_array);
     //Note: The function "checkForLinkingErrors" checks if there is
     // an error in the given program. You should use it to check if there is a
     // linking error and print it so that you can know what is wrong with the
     // program. The returned string will be empty if there is no errors.
 
-    return true;
+    std::string Error= checkForLinkingErrors(program);
+    if(Error==std::string())
+        {
+            return true;
+        }
+        else
+        {
+            std::cerr<<"ERROR IN LINKING: "<<Error<< std::endl;// outputing the error message
+            return false;
+        }
 }
 
 ////////////////////////////////////////////////////////////////////
