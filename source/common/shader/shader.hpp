@@ -61,20 +61,20 @@ namespace our {
         void set(const std::string &uniform, glm::vec2 value) {
             //TODO: (Req 1) Send the given 2D vector value to the given uniform
             GLuint u=getUniformLocation(uniform);
-            glUniform2fv(u,2,&value[0]);
+            glUniform2f(u,value.x,value.y);
              
         }
 
         void set(const std::string &uniform, glm::vec3 value) {
             //TODO: (Req 1) Send the given 3D vector value to the given uniform
             GLuint u=getUniformLocation(uniform);
-            glUniform3fv(u,3,&value[0]);
+            glUniform3f(u,value.x,value.y,value.z);
         }
 
         void set(const std::string &uniform, glm::vec4 value) {
             //TODO: (Req 1) Send the given 4D vector value to the given uniform
            GLuint u=getUniformLocation(uniform);
-           glUniform4fv(u,4,&value[0]);     
+            glUniform4f(u,value.x,value.y,value.z,1.0);   
         }
 
         void set(const std::string &uniform, glm::mat4 matrix) {
@@ -88,7 +88,8 @@ namespace our {
         ShaderProgram& operator= (const ShaderProgram&) = delete;
         //Question: Why do we delete the copy constructor and assignment operator?
         // It should be defined as deleted when it cannot be written in a way that wouldn't have undesirable or surprising behaviour.
-    };
+        // we delete it since the shader program must preserve its uniqueness so we should avoid having multiple compilations
+    };  
 
 }
 

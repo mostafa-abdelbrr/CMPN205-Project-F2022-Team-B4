@@ -34,14 +34,17 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
     //We return true if the compilation succeeded
     if(Error==std::string())
     {
-        // creating the shader program
-        ShaderProgram();
-        glAttachShader(program, shader);// we only attach the shader if there was no errors in compilation
+        glAttachShader(this->program, shader);// we only attach the shader if there was no errors in compilation
+        glDeleteShader(shader);//onec we attach the shader to the program we ne longer need it
+
+        // returning true to indicate success in attaching shader
         return true;
     }
     else
     {
         std::cerr<<"ERROR IN COMPILATION: "<< Error<< std::endl;// outputing the error message
+        glDeleteShader(shader); 
+        // returning false to indicate failure in attaching shader
         return false;
     }
 }
@@ -50,10 +53,8 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
 
 bool our::ShaderProgram::link() const {
     //TODO: Complete this function
-    glLinkProgram(program);
-    GLuint vertex_array;
-    glCreateVertexArrays(1, &vertex_array);
-    glBindVertexArray(vertex_array);
+    glLinkProgram(this->program);
+  
     //Note: The function "checkForLinkingErrors" checks if there is
     // an error in the given program. You should use it to check if there is a
     // linking error and print it so that you can know what is wrong with the
@@ -62,11 +63,13 @@ bool our::ShaderProgram::link() const {
     std::string Error= checkForLinkingErrors(program);
     if(Error==std::string())
         {
+            // returning true to indicate success in linking the program
             return true;
         }
         else
         {
             std::cerr<<"ERROR IN LINKING: "<<Error<< std::endl;// outputing the error message
+            // returning false to indicate failure in linking the program
             return false;
         }
 }
