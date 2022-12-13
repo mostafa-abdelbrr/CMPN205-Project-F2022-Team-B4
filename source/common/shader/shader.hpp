@@ -74,13 +74,13 @@ namespace our {
         void set(const std::string &uniform, glm::vec4 value) {
             //TODO: (Req 1) Send the given 4D vector value to the given uniform
            GLuint u=getUniformLocation(uniform);
-            glUniform4f(u,value.x,value.y,value.z,1.0);   
+            glUniform4f(u,value.x,value.y,value.z,value.w);   
         }
 
         void set(const std::string &uniform, glm::mat4 matrix) {
             //TODO: (Req 1) Send the given matrix 4x4 value to the given uniform
             GLuint u=getUniformLocation(uniform);
-            glUniformMatrix4fv(u,1,GL_FALSE,&matrix[0][0]);
+            glUniformMatrix4fv(u,1,GL_FALSE,glm::value_ptr(matrix));
         }
 
         //TODO: (Req 1) Delete the copy constructor and assignment operator.

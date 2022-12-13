@@ -29,6 +29,5 @@ void main(){
     frag_color.r = dot(color,red);
     frag_color.g = dot(color,green);
     frag_color.b = dot(color,blue);
-    frag_color.a = 1.0;
-    // frag_color=color;
+
 }
