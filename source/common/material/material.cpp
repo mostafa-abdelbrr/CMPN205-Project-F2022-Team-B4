@@ -28,8 +28,6 @@ namespace our {
     void TintedMaterial::setup() const {
         //TODO: (Req 7) Write this function
         setup();
-        // tint_location = shader->getUniformLocation("tint");
-        // glUniform1f(tint_location, tint)
         shader->set("tint", tint);
     }
 
