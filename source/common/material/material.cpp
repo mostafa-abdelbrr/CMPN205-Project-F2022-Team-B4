@@ -27,7 +27,7 @@ namespace our {
     // set the "tint" uniform to the value in the member variable tint 
     void TintedMaterial::setup() const {
         //TODO: (Req 7) Write this function
-        setup();
+        Material::setup();
         shader->set("tint", tint);
     }
 
@@ -43,8 +43,11 @@ namespace our {
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
     void TexturedMaterial::setup() const {
         //TODO: (Req 7) Write this function
-        setup();
-        shader->set("tex", alphaThreshold);
+        TintedMaterial::setup();
+        shader->set("alphaThreshold", alphaThreshold);
+        texture->bind();
+        sampler->bind(texture->getOpenGLName());
+        shader->set("tex", texture->getOpenGLName());
 
     }
 
