@@ -39,7 +39,7 @@ our::Texture2D* our::texture_utils::loadImage(const std::string& filename, bool 
     // binding the texture
     texture->bind();
     // telling OpenGL how our data is aligned (while setting Unpack Alignment to 1-byte)
-    // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     // Sending data to texture
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
