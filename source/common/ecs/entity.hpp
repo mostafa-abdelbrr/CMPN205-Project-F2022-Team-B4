@@ -76,6 +76,7 @@ namespace our {
             for (int index = 0; index < components.size(); index++) {
                 T* component = getComponent(index); //dynamic_cast<T*>(components[index]);
                 if (component != nullptr) {
+                    delete component;
                     components.erase(index);
                     return;
                 }
@@ -98,7 +99,7 @@ namespace our {
             //TODO: (Req 8) Go through the components list and find the given component "component".
             // If found, delete the found component and remove it from the components list
             for (int index = 0; index < components.size(); index++) {
-                if (getComponent(index) == this.component) {
+                if (getComponent(index) == component) {
                     delete getComponent(index);
                     components.erase(index);
                     return;
@@ -110,14 +111,16 @@ namespace our {
         ~Entity(){
             //TODO: (Req 8) Delete all the components in "components".
             auto it = components.begin();
-            int index = 0;
+            if(*it != nullptr && (*it)->owner == this) {
+                delete *it;
+                components.erase(it);
+            }
             while(*it != nullptr) {
-                std::advance(it, index);
+                std::advance(it, 1);
                 if(*it != nullptr && (*it)->owner == this) {
                     delete *it;
                     components.erase(it);
                 }
-                index++;
             }
         }
 
