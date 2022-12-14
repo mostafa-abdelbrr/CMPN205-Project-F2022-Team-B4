@@ -34,7 +34,7 @@ namespace our {
         T* addComponent(){
             static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
             //TODO: (Req 8) Create an component of type T, set its "owner" to be this entity, then push it into the component's list
-            T *component;
+            T *component = new T;
             component->owner = this;
             components.push_back(component);
             // Don't forget to return a pointer to the new component
@@ -52,7 +52,7 @@ namespace our {
                 std::advance(it, index);
                 T* comp = dynamic_cast<T*>(*it);
                 if(it != components.end() && comp != nullptr)
-                return dynamic_cast<T*>(comp);
+                return comp;
             }
             return nullptr;
         }
@@ -99,6 +99,7 @@ namespace our {
             // If found, delete the found component and remove it from the components list
             for (int index = 0; index < components.size(); index++) {
                 if (getComponent(index) == this.component) {
+                    delete getComponent(index);
                     components.erase(index);
                     return;
                 }
