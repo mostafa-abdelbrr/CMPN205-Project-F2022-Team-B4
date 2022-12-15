@@ -47,6 +47,7 @@ namespace our {
         shader->set("alphaThreshold", alphaThreshold);
         texture->bind();
         sampler->bind(texture->getOpenGLName());
+        int tex = texture->getOpenGLName();
         shader->set("tex", texture->getOpenGLName());
 
     }
