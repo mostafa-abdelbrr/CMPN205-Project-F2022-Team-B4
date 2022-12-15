@@ -34,7 +34,7 @@ namespace our {
         T* addComponent(){
             static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
             //TODO: (Req 8) Create an component of type T, set its "owner" to be this entity, then push it into the component's list
-            T *component = new T;
+            T *component = new T();
             component->owner = this;
             components.push_back(component);
             // Don't forget to return a pointer to the new component
@@ -47,12 +47,10 @@ namespace our {
         T* getComponent(){
             //TODO: (Req 8) Go through the components list and find the first component that can be dynamically cast to "T*".
             // Return the component you found, or return null of nothing was found.
-            for (int index=0; index < components.size(); index){
-                auto it = components.begin();
-                std::advance(it, index);
-                T* comp = dynamic_cast<T*>(*it);
-                if(it != components.end() && comp != nullptr)
-                return comp;
+            for (auto &comp : components){
+                T* comp_cast = dynamic_cast<T*>(comp);
+                if(comp_cast != nullptr)
+                return comp_cast;
             }
             return nullptr;
         }
@@ -99,11 +97,7 @@ namespace our {
             //TODO: (Req 8) Go through the components list and find the given component "component".
             // If found, delete the found component and remove it from the components list
             for (int index = 0; index < components.size(); index++) {
-                if (getComponent(index) == component) {
-                    delete getComponent(index);
-                    components.erase(index);
-                    return;
-                }
+                deleteComponent(index);
             }
         }
 
@@ -122,6 +116,10 @@ namespace our {
                     components.erase(it);
                 }
             }
+            // for (int index = 0; index < components.size(); index++) {
+            //     deleteComponent(index);
+            // }
+            // components.clear();
         }
 
         // Entities should not be copyable

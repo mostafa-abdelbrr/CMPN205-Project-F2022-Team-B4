@@ -35,8 +35,8 @@ namespace our {
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
         // then you can use glm::lookAt
-        glm::vec4 eye_vec4 = M * glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-        glm::vec4 center_vec4 = M * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+        glm::vec4 eye_vec4 = M * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec4 center_vec4 = M * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
         glm::vec4 up_vec4 = M * glm::vec4(0.0f, 1.0f, 0.0, 0.0f);
 
         glm::vec3 eye = glm::vec3(eye_vec4[0], eye_vec4[1], eye_vec4[2]);
@@ -58,7 +58,7 @@ namespace our {
                 return glm::perspective(fovY, aspectRatio, near, far);
             }
         else {
-            float top = orthoHeight/2;
+            float top = orthoHeight/2.0f;
             float bottom = - top;
             float left = bottom * aspectRatio;
             float right = top * aspectRatio;

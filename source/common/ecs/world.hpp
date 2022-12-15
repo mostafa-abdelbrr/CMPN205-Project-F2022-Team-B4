@@ -26,7 +26,7 @@ namespace our {
         Entity* add() {
             //TODO: (Req 8) Create a new entity, set its world member variable to this,
             // and don't forget to insert it in the suitable container.
-            Entity * entity = new Entity;
+            Entity * entity = new Entity();
             entity->world = this;
             entities.insert(entity);
             return entity;
@@ -50,23 +50,14 @@ namespace our {
         // Then each of these elements are deleted.
         void deleteMarkedEntities(){
             //TODO: (Req 8) Remove and delete all the entities that have been marked for removal
-            for (auto it = markedForRemoval.begin(); it != markedForRemoval.end(); ++it) {
-                Entity *entity = *markedForRemoval.find(*it);
-                entities.erase(entities.find(entity));
-                markedForRemoval.erase(entity);
-                delete entity;
-            }
+            markedForRemoval.clear();
         }
 
         //This deletes all entities in the world
         void clear(){
             //TODO: (Req 8) Delete all the entites and make sure that the containers are empty
-            for (auto it = entities.begin(); it != entities.end(); ++it) {
-                Entity * entity = *markedForRemoval.find(*it);
-                entities.erase(entities.find(entity));
-                markedForRemoval.erase(entity);
-                delete entity;
-            }
+            entities.clear();
+            deleteMarkedEntities();
 
         }
 
