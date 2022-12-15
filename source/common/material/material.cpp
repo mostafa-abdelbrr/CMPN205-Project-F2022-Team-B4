@@ -46,8 +46,8 @@ namespace our {
         TintedMaterial::setup();
         shader->set("alphaThreshold", alphaThreshold);
         texture->bind();
-        sampler->bind(texture->getOpenGLName());
-        int tex = texture->getOpenGLName();
+        // sampler->bind(texture->getOpenGLName());
+        sampler->bind(0);
         shader->set("tex", texture->getOpenGLName());
 
     }
