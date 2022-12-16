@@ -34,6 +34,7 @@ jobs:
       
 
   run-tests:
+    name: run-tests
     needs: build
     runs-on: windows-latest
     steps:
@@ -43,6 +44,7 @@ jobs:
         shell: powershell
 
   compare-tests:
+    name: compare-tests
     needs: run-tests
     runs-on: windows-latest
     steps:
