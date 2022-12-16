@@ -26,29 +26,9 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    # - name: Test
-    #   working-directory: ${{github.workspace}}/build
-    #   # Execute tests defined by the CMake configuration.  
-    #   # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-    #   run: ctest -C ${{env.BUILD_TYPE}}
-      
-
-  run-tests:
-    name: run-tests
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Script
-        run: ./scripts/run-all.ps1
-        shell: powershell
-
-  compare-tests:
-    name: compare-tests
-    needs: run-tests
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Script
-        run: ./scripts/compare-all.ps1
-        shell: powershell
+    - name: run-tests
+      run: ./scripts/run-all.ps1
+      shell: powershell
+    - name: Script
+      run: ./scripts/compare-all.ps1
+      shell: powershell
