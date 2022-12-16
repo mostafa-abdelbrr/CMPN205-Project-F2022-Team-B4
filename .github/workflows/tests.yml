@@ -8,6 +8,6 @@ jobs:
       steps:
         - uses: actions/checkout@v1
         - name: Script
-          run: ./scripts/run-all.ps1
-          run: ./scripts/compare-all.ps1
+        - run: ./scripts/run-all.ps1
+        - run: ./scripts/compare-all.ps1
           shell: powershell
