@@ -88,7 +88,7 @@ namespace our {
         ShaderProgram (const ShaderProgram&) = delete;
         ShaderProgram& operator= (const ShaderProgram&) = delete;
         //Question: Why do we delete the copy constructor and assignment operator?
-        // It should be defined as deleted when it cannot be written in a way that wouldn't have undesirable or surprising behaviour.
+        //since we are following the Resource Acquisition Is Initialization (RAII) we need to release all resources on destruction
         // we delete it since the shader program must preserve its uniqueness so we should avoid having multiple compilations
     };  
 
