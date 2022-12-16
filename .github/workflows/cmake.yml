@@ -32,3 +32,13 @@ jobs:
     #   # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
     #   run: ctest -C ${{env.BUILD_TYPE}}
       
+
+  tests:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Script
+        run: ./scripts/run-all.ps1
+        run: ./scripts/compare-all.ps1
+        shell: powershell
