@@ -33,12 +33,20 @@ jobs:
     #   run: ctest -C ${{env.BUILD_TYPE}}
       
 
-  tests:
+  run-tests:
     needs: build
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
       - name: Script
-      - run: ./scripts/run-all.ps1
-      - run: ./scripts/compare-all.ps1
+        run: ./scripts/run-all.ps1
+        shell: powershell
+
+  compare-tests:
+    needs: run-tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Script
+        run: ./scripts/compare-all.ps1
         shell: powershell
