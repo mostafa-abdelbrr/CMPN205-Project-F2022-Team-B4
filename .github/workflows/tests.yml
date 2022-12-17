@@ -7,6 +7,36 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Compare images
-      run: ./scripts/compare-all.ps1
+    - name: Shader Test
+      run: ./scripts/compare-all.ps1 -test shader-test
+      shell: powershell
+      name: Mesh Test
+      run: ./scripts/compare-all.ps1 -test mesh-test
+      shell: powershell
+      name: Transform Test
+      run: ./scripts/compare-all.ps1 -test transform-test
+      shell: powershell
+      name: Pipeline Test
+      run: ./scripts/compare-all.ps1 -test pipeline-test
+      shell: powershell
+      name: Texture Test
+      run: ./scripts/compare-all.ps1 -test texture-test
+      shell: powershell
+      name: Sampler Test
+      run: ./scripts/compare-all.ps1 -test sampler-test
+      shell: powershell
+      name: Material Test
+      run: ./scripts/compare-all.ps1 -test matrial-test
+      shell: powershell
+      name: Entity Test
+      run: ./scripts/compare-all.ps1 -test entity-test
+      shell: powershell
+      name: Renderer Test
+      run: ./scripts/compare-all.ps1 -test renderer-test
+      shell: powershell
+      name: Sky Test
+      run: ./scripts/compare-all.ps1 -test sky-test
+      shell: powershell
+      name: Postprocess Test
+      run: ./scripts/compare-all.ps1 -test postprocess-test
       shell: powershell
