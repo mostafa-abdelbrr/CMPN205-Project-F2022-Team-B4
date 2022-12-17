@@ -10,33 +10,33 @@ jobs:
     - name: Shader Test
       run: ./scripts/compare-all.ps1 -test shader-test
       shell: powershell
-      name: Mesh Test
+    - name: Mesh Test
       run: ./scripts/compare-all.ps1 -test mesh-test
       shell: powershell
-      name: Transform Test
+    - name: Transform Test
       run: ./scripts/compare-all.ps1 -test transform-test
       shell: powershell
-      name: Pipeline Test
+    - name: Pipeline Test
       run: ./scripts/compare-all.ps1 -test pipeline-test
       shell: powershell
-      name: Texture Test
+    - name: Texture Test
       run: ./scripts/compare-all.ps1 -test texture-test
       shell: powershell
-      name: Sampler Test
+    - name: Sampler Test
       run: ./scripts/compare-all.ps1 -test sampler-test
       shell: powershell
-      name: Material Test
+    - name: Material Test
       run: ./scripts/compare-all.ps1 -test matrial-test
       shell: powershell
-      name: Entity Test
+    - name: Entity Test
       run: ./scripts/compare-all.ps1 -test entity-test
       shell: powershell
-      name: Renderer Test
+    - name: Renderer Test
       run: ./scripts/compare-all.ps1 -test renderer-test
       shell: powershell
-      name: Sky Test
+    - name: Sky Test
       run: ./scripts/compare-all.ps1 -test sky-test
       shell: powershell
-      name: Postprocess Test
+    - name: Postprocess Test
       run: ./scripts/compare-all.ps1 -test postprocess-test
       shell: powershell
