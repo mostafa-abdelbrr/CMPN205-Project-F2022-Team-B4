@@ -56,7 +56,10 @@ class Menustate: public our::State {
         menuMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
         menuMaterial->shader->link();
         // Then we load the menu texture
-        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu2.PNG");
+        // texture option1
+        // menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu2.PNG");
+        // texture option2
+        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.jpeg");
         // Initially, the menu material will be black, then it will fade in
         menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -99,12 +102,23 @@ class Menustate: public our::State {
         // - The argument list () which is the arguments that the lambda should receive when it is called.
         //      We leave it empty since button actions receive no input.
         // - The body {} which contains the code to be executed. 
-        buttons[0].position = {830.0f, 600.0f};
-        buttons[0].size = {400.0f, 36.0f};
+
+         // buttons cooredinates and size for menu option1
+        // buttons[0].position = {830.0f, 600.0f};
+        // buttons[0].size = {400.0f, 36.0f};
+        // buttons[0].action = [this](){this->getApp()->changeState("play");};
+
+        // buttons[1].position = {880.0f, 650.0f};
+        // buttons[1].size = {350.0f, 36.0f};
+        // buttons[1].action = [this](){this->getApp()->close();};
+
+        // buttons cooredinates and size for menu option2
+        buttons[0].position = {435.0f, 415.0f};
+        buttons[0].size = {400.0f, 30.0f};
         buttons[0].action = [this](){this->getApp()->changeState("play");};
 
-        buttons[1].position = {880.0f, 650.0f};
-        buttons[1].size = {350.0f, 36.0f};
+        buttons[1].position = {435.0f, 450.0f};
+        buttons[1].size = {400.0f, 30.0f};
         buttons[1].action = [this](){this->getApp()->close();};
     }
 
