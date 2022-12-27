@@ -4,6 +4,9 @@
 
 #include <glm/mat4x4.hpp>
 
+/* TODO:Create a light component. The component will identify that the entity is a light and will contain all the
+    data related to the light (e.g. color, type, cone angles) except the position and the direction which
+    should be calculated from the entity component.*/
 namespace our {
 
  // An enum that defines the type of the light (DIRECTIONAL, POINT, SPOT)
