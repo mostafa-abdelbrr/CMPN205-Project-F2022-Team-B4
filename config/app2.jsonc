@@ -24,7 +24,7 @@
                     "vs":"assets/shaders/textured.vert",
                     "fs":"assets/shaders/textured.frag"
                 },
-                "lit":{
+                "lit-textured":{
                     "vs":"assets/shaders/light.vert",
                     "fs":"assets/shaders/light.frag"
                 }
@@ -100,8 +100,8 @@
                     "sampler": "default"
                 },
                 "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "textured-lit",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -110,8 +110,13 @@
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
+                    // "tint": [1, 1, 1, 1],
+                    // "texture":"monkey",
+                    "albedo": "monkey",
+                    "specular": "monkey",
+                    "roughness": "monkey",
+                    "ambient_occlusion": "monkey",
+                    "emission": "monkey",
                     "sampler": "default"
                 },
                 "moon":{
@@ -157,6 +162,42 @@
                     }
                 ]
             },
+            {
+                "position": [1, 3, 3],
+                "name": "point light",
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": 1,
+                        "color": [ 0.1, 0.1, 0.3 ],
+                        "direction": [ 0, -1.0, 0 ],
+                        "inner_angle": 15.0,
+                        "outer_angle":30.0,
+                        "attenuation_constant":0,
+                        "attenuation_linear":0,
+                        "attenuation_quadratic":0.2
+                    }
+                ]
+            },
+            // {
+            //     "position": [0, 10, 0],
+            //     "name":"sun",
+            //     "components": [
+            //         {
+            //             "type": "Light",
+            //             "lightType": 0,         //directional
+            //             "color":[0.1, 0.1, 0.3],
+            //             "direction": [ 0, -1.0, 0 ]
+            //             // "inner_angle": 15.0,
+            //             // "outer_angle":30.0,
+            //             // "attenuation_constant":0,
+            //             // "attenuation_linear":0,
+            //             // "attenuation_quadratic":0.1
+                        
+            //         }
+
+            //     ]
+            // },
             {
                 "rotation": [-45, 0, 0],
                 "components": [
