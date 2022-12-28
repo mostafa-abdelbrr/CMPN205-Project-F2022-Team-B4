@@ -21,11 +21,14 @@ out Varyings {
 } vs_out;
 
 void main() {
+    // this vertex shader is different because we need to seperate the world space because this is where the effect 
+    // of the lighting takes place
+    vec3 world = (transform * vec4(position, 1.0)).xyz;
+    vs_out.world = world;
+    gl_Position = VP * vec4(world, 1.0);
 
-    vs_out.world = (transform * vec4(position, 1.0f)).xyz;
-    vs_out.view = eye - vs_out.world;
-    vs_out.normal = normalize((transform_IT * vec4(normal, 0.0f)).xyz);
-    gl_Position = VP * vec4(vs_out.world, 1.0);
+    vs_out.normal =normalize( (transform_IT * vec4(normal, 0.0)).xyz);
+    vs_out.view = eye - world;
     vs_out.color = color;
     vs_out.tex_coord = tex_coord;
 

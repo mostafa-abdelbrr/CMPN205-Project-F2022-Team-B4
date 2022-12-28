@@ -5,7 +5,7 @@
 #include "mesh-renderer.hpp"
 #include "free-camera-controller.hpp"
 #include "movement.hpp"
-
+#include "light.hpp"
 namespace our {
 
     // Given a json object, this function picks and creates a component in the given entity
@@ -22,7 +22,10 @@ namespace our {
             component = entity->addComponent<MovementComponent>();
         } else if (type == MeshRendererComponent::getID()) {
             component = entity->addComponent<MeshRendererComponent>();
-        }
+        } else if (type == LightComponent::getID()){ //added to desirialize light componants
+             component = entity->addComponent<LightComponent>();
+              std::printf("added light componant\n");
+        } 
         if(component) component->deserialize(data);
     }
 

@@ -54,6 +54,12 @@ namespace our {
         }
         shader->set("tex", texture->getOpenGLName());
 
+        // texture->bind();
+      
+        // sampler->bind(0);
+ 
+        // shader->set("tex",0);
+
     }
 
     // This function read the material data from a json object
@@ -119,13 +125,15 @@ namespace our {
     {
         // deserializing the data of the material itself->parent class of the lit material
          Material::deserialize(data);
-
+        std::printf("lit material deserialization---------------------------------------\n");
         if(!data.is_object())
          return;
         // getting the data from the json file
         alphaThreshold = data.value("alphaThreshold", 0.0f);
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
-        specular = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+        std::printf("albedo=\n");
+        albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+        std::printf("specular\n");
         specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
         roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
         ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));

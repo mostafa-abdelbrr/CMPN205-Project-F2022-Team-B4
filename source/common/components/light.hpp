@@ -2,7 +2,7 @@
 
 #include "../ecs/component.hpp"
 
-#include <glm/mat4x4.hpp>
+#include <glm/glm.hpp>
 
 /* TODO:Create a light component. The component will identify that the entity is a light and will contain all the
     data related to the light (e.g. color, type, cone angles) except the position and the direction which
@@ -31,7 +31,7 @@ namespace our {
         float inner_angle, outer_angle; //cone angles
 
         // The ID of this component type is "light"
-        static std::string getID() { return "light"; }
+        static std::string getID() { return "Light"; }
 
         // Reads light parameters from the given json object
         void deserialize(const nlohmann::json& data) override;
