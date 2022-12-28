@@ -4,7 +4,7 @@
 #include "../components/camera.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../asset-loader.hpp"
-
+#include "../components/light.hpp" //adding an include for the light class we made
 #include <glad/gl.h>
 #include <vector>
 #include <algorithm>
@@ -40,6 +40,9 @@ namespace our
         GLuint postprocessFrameBuffer, postProcessVertexArray;
         Texture2D *colorTarget, *depthTarget;
         TexturedMaterial* postprocessMaterial;
+        // TODO: Add support for lighting in the forward renderer
+        // adding a list for all the light componants which would be found in the game
+        std::vector<LightComponent*> lights;
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
         // windowSize is the width & height of the window (in pixels).

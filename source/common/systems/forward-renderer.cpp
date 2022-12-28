@@ -127,6 +127,13 @@ namespace our {
         opaqueCommands.clear();
         transparentCommands.clear();
         for(auto entity : world->getEntities()){
+            // TODO: Add support for lighting in the forward renderer
+            // if the entity has a light componant we store it in the lights list->so it could be sent to the shaders
+             if(auto light = entity->getComponent<LightComponent>())
+                  {
+                        lights.push_back(light);
+                  }
+                
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
             // If this entity has a mesh renderer component
@@ -192,7 +199,68 @@ namespace our {
             elemental.material->setup();
             glm::mat4 transformater = VP * elemental.localToWorld;
             elemental.material->shader->set("transform",transformater);
-            elemental.mesh->draw();
+            // ----------------------------------------------------------------------
+            // TODO: Add support for lighting in the forward renderer
+            // setting all the uniforms used in the the light shaders (vertex and fragment)
+            elemental.material->shader->set("transform_IT", glm::transpose(transformater));
+			elemental.material->shader->set("VP", VP);
+			glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
+			elemental.material->shader->set("eye", glm::vec3(eye));
+
+            // we loop over all the light componants that we pushed back into the list and send them to the fragment shader
+            int light_index = 0;
+			const int MAX_LIGHT_COUNT = 8;
+			for (const auto &light : lights)
+            {
+                std::string lightByIndex = "lights[" + std::to_string(light_index) + "].";
+                // setting up the light's type
+                elemental.material->shader->set(lightByIndex + "type",static_cast<int>(light->lightType));
+                // setting up the light's color
+                elemental.material->shader->set(lightByIndex + "color", glm::normalize(light->color));
+
+                // the rest of the setup is different according to the light type
+                switch (light->lightType) {
+                case LightType::DIRECTIONAL:
+                    // setting up the light's direction based on the owner entity's direction and the light's own direction
+                    glm::vec4 dir=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
+                    elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir));
+                    break;
+                
+                case LightType::POINT:
+                    // setting up the light's position which is based on the position of the owner entity
+                    glm::vec4 ownerPosition=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
+                    elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition));
+                    // setting up the light's attenuation constants
+                    elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
+                    elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
+                    elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
+                    break;
+                case LightType::SPOT:
+                    // setting up the light's direction based on the owner entity's direction and the light's own direction
+                    dir=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
+                    elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir));
+                    // setting up the light's position which is based on the position of the owner entity
+                    ownerPosition=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
+                    elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition));
+                    // setting up the light's attenuation constants
+                    elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
+                    elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
+                    elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
+                    // setting up the light's cone angles
+                    elemental.material->shader->set(lightByIndex + "inner_angle", light->inner_angle);
+                    elemental.material->shader->set(lightByIndex + "outer_angle", light->outer_angle);
+                    break;
+                }
+                // imcrementing the index
+                light_index++;
+                // break the loop if we reach the maximum number of lights
+				if (light_index >= MAX_LIGHT_COUNT)
+					break;
+
+            }
+            elemental.material->shader->set("light_count",light_index);
+            // last step would be to draw the material
+             elemental.mesh->draw();
         }
         // ---------------------- Why Opaque then sky? ------------------------- 
         /* Drawing logic of opaque objects prefers nearest to furthest to decrease overdraw. Sky is considered opaque but is
