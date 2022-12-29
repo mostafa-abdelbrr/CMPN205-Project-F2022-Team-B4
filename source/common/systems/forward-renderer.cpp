@@ -129,7 +129,7 @@ namespace our {
         lights.clear();
         int i=1;
         for(auto entity : world->getEntities()){
-             std::printf("we have %d entityyyyyyyyyyyyyyy\n",i);
+             std::printf("--------------------we have %d entity----------------------\n",i);
              i++;
             // TODO: Add support for lighting in the forward renderer
             // if the entity has a light componant we store it in the lights list->so it could be sent to the shaders
@@ -142,12 +142,10 @@ namespace our {
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) 
             {
-                std::printf("ENTITY IS still not CAMERA\n");
                 camera = entity->getComponent<CameraComponent>();
             }
             // If this entity has a mesh renderer component
             if(auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer){
-                std::printf("mesh renderer?????????\n");
                 // We construct a command from it
                 RenderCommand command;
                 command.localToWorld = meshRenderer->getOwner()->getLocalToWorldMatrix();
@@ -213,7 +211,7 @@ namespace our {
             // ----------------------------------------------------------------------
             // TODO: Add support for lighting in the forward renderer
             // setting all the uniforms used in the the light shaders (vertex and fragment)
-            elemental.material->shader->set("transform_IT", glm::transpose(transformater));
+            elemental.material->shader->set("transform_IT", glm::transpose(glm::inverse(transformater)));
 			elemental.material->shader->set("VP", VP);
 			glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
 			elemental.material->shader->set("eye", glm::vec3(eye));
@@ -261,8 +259,8 @@ namespace our {
                     elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
                     elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
                     // setting up the light's cone angles
-                    elemental.material->shader->set(lightByIndex + "inner_angle", light->inner_angle);
-                    elemental.material->shader->set(lightByIndex + "outer_angle", light->outer_angle);
+                    elemental.material->shader->set(lightByIndex + "inner_angle", glm::radians(light->inner_angle));
+                    elemental.material->shader->set(lightByIndex + "outer_angle", glm::radians(light->outer_angle));
                     break;
                 }
                 // imcrementing the index

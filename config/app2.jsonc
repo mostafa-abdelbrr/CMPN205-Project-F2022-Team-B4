@@ -100,26 +100,6 @@
                     "sampler": "default"
                 },
                 "monkey":{
-                    "type": "lit",
-                    "shader": "lit",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    // "tint": [1, 1, 1, 1],
-                    // "texture":"monkey",
-                    "albedo": "monkey",
-                    "specular": "monkey",
-                    "roughness": "monkey",
-                    "ambient_occlusion": "monkey",
-                    "emission": "monkey",
-                    "sampler": "default"
-                },
-                "moon":{
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
@@ -131,7 +111,30 @@
                         }
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "moon",
+                    "texture":"monkey",
+                    // "albedo": "monkey",
+                    // "specular": "monkey",
+                    // "roughness": "monkey",
+                    // "ambient_occlusion": "monkey",
+                    // "emission": "monkey",
+                    "sampler": "default"
+                },
+                "moon":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "albedo":"moon",
+                    "specular":"moon",
+                    "roughness":"moon",
+                    "ambient_occlusion": "moon",
+                    "emission": "glass",
                     "sampler": "default"
                 }
                 
@@ -215,23 +218,23 @@
                     }
                 ]
             }
-            // ,
-            // {
-            //     "position": [0, 4, 0],
-            //     "rotation": [45, 45, 0],
-            //     "scale": [5, 5, 5],
-            //     "components": [
-            //         {
-            //             "type": "Mesh Renderer",
-            //             "mesh": "sphere",
-            //             "material": "moon"
-            //         },
-            //         {
-            //             "type": "Movement",
-            //             "angularVelocity": [0, 90, 0]
-            //         }
-            //     ]
-            // }
+            ,
+            {
+                "position": [0, 4, 0],
+                "rotation": [45, 45, 0],
+                "scale": [5, 5, 5],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "moon"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
+                ]
+            }
         ]
     }
 }
