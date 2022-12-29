@@ -79,7 +79,9 @@ namespace our {
         sampler->bind(0);
         // send the unit number to the uniform variable "material.albedo"
         shader->set("material.albedo", 0);
-
+        std::printf("sending data to shader\n");
+        int i=shader->getUniformLocation("material.albedo");
+        std::printf("material.albedo is in %d \n",i);
         // bing the sampler an texture for the specular
         glActiveTexture(GL_TEXTURE1);
         specular->bind();
@@ -128,8 +130,11 @@ namespace our {
         albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
         std::printf("specular\n");
         specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
+        std::printf("roughness\n");
         roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+        std::printf("ambient_occlusion\n");
         ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
+        std::printf("emission\n");
         emission = AssetLoader<Texture2D>::get(data.value("emission", ""));
 
     }

@@ -27,13 +27,19 @@ namespace our {
       }
       //  reading the light color, direction, attenuation, and angles
       color = data.value("color",  glm::vec3 (1.0f, 1.0f, 1.0f));
+      std::printf("light color\n");
       direction = data.value("direction",  glm::vec3 (-1.0f, 0.0f, 0.0f));
-
+      std::printf("light direction\n");
       inner_angle = data.value("inner_angle", glm::radians(15.0f));
+      std::printf("light inner_angle\n");
       outer_angle= data.value("outer_angle", glm::radians(30.0f));
+      std::printf("light outer_angle\n");
 
       attenuation_constant= data.value("attenuation_constant", 0.0f);
+      std::printf("light attenuation_constant\n");
       attenuation_linear= data.value("attenuation_linear", 0.0f);
+      std::printf("light attenuation_linear\n");
       attenuation_quadratic= data.value("attenuation_quadratic", 1.0f);
+      std::printf("light attenuation_quadratic\n");
     }
 }
