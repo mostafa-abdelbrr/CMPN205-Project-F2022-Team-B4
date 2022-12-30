@@ -20,7 +20,7 @@ namespace our
     class FreeCameraControllerSystem {
         Application* app; // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
-        int margin = 0;
+        int margin = 0.2;
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -31,10 +31,10 @@ namespace our
         // Check for AABB collision before allowing the camera to move..
         bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, int margin=1){
             if(
-                player[0] > entity[0] - scale[0] &&
-                player[0] < entity[0] + scale[0] &&
-                player[2] > entity[2] - scale[2] && 
-                player[2] < entity[2] + scale[2]
+                player[0] + margin > entity[0] - scale[0] &&
+                player[0] - margin < entity[0] + scale[0] &&
+                player[2] + margin > entity[2] - scale[2] && 
+                player[2] - margin < entity[2] + scale[2]
             ) {
                 return true;
             }
@@ -109,7 +109,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity){
-                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
                         }
@@ -124,7 +124,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity){
-                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
                         }
@@ -142,7 +142,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity){
-                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
                         }
@@ -156,7 +156,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity){
-                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
                         }
