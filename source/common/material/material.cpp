@@ -45,6 +45,7 @@ namespace our {
         //TODO: (Req 7) Write this function
         TintedMaterial::setup();
         shader->set("alphaThreshold", alphaThreshold);
+        glActiveTexture(GL_TEXTURE0);
         if (texture) texture->bind();
         else Texture2D::unbind();
         
