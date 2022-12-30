@@ -20,11 +20,25 @@ namespace our
     class FreeCameraControllerSystem {
         Application* app; // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
+        int margin = 0;
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
         void enter(Application* app){
             this->app = app;
+        }
+
+        // Check for AABB collision before allowing the camera to move..
+        bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, int margin=1){
+            if(
+                player[0] > entity[0] - scale[0] &&
+                player[0] < entity[0] + scale[0] &&
+                player[2] > entity[2] - scale[2] && 
+                player[2] < entity[2] + scale[2]
+            ) {
+                return true;
+            }
+            return false;
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
@@ -61,7 +75,7 @@ namespace our
             // and use it to update the camera rotation
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1)){
                 glm::vec2 delta = app->getMouse().getMouseDelta();
-                rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
+                // rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
                 rotation.y -= delta.x * controller->rotationSensitivity; // The x-axis controls the yaw
             }
 
@@ -90,14 +104,67 @@ namespace our
 
             // We change the camera position based on the keys WASD/QE
             // S & W moves the player back and forth
-            if(app->getKeyboard().isPressed(GLFW_KEY_W)) position += front * (deltaTime * current_sensitivity.z);
-            if(app->getKeyboard().isPressed(GLFW_KEY_S)) position -= front * (deltaTime * current_sensitivity.z);
+            if(app->getKeyboard().isPressed(GLFW_KEY_W)) {
+                glm::vec3 new_position = position + front * (deltaTime * current_sensitivity.z);
+                    bool collision = false;
+                    for(auto other_entity : world->getEntities()){
+                        if (other_entity != entity){
+                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                                collision = true;
+                            }
+                        }
+                    }
+                    if (!collision) {
+                        position = new_position;
+                    }
+            }
+            if(app->getKeyboard().isPressed(GLFW_KEY_S)) 
+            {
+                glm::vec3 new_position = position - front * (deltaTime * current_sensitivity.z);
+                    bool collision = false;
+                    for(auto other_entity : world->getEntities()){
+                        if (other_entity != entity){
+                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                                collision = true;
+                            }
+                        }
+                    }
+                    if (!collision) {
+                        position = new_position;
+                    }
+            }
             // Q & E moves the player up and down
             if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
             if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
             // A & D moves the player left or right 
-            if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
+            if(app->getKeyboard().isPressed(GLFW_KEY_D)) {
+                glm::vec3 new_position = position + right * (deltaTime * current_sensitivity.x);
+                    bool collision = false;
+                    for(auto other_entity : world->getEntities()){
+                        if (other_entity != entity){
+                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                                collision = true;
+                            }
+                        }
+                    }
+                    if (!collision) {
+                        position = new_position;
+                    }
+            }
+            if(app->getKeyboard().isPressed(GLFW_KEY_A)) {
+                glm::vec3 new_position = position - right * (deltaTime * current_sensitivity.x);
+                    bool collision = false;
+                    for(auto other_entity : world->getEntities()){
+                        if (other_entity != entity){
+                            if (check_collision(new_position, other_entity->localTransform.position, entity->localTransform.scale, margin)) {
+                                collision = true;
+                            }
+                        }
+                    }
+                    if (!collision) {
+                        position = new_position;
+                    }
+            }
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
