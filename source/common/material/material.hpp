@@ -65,7 +65,6 @@ namespace our {
         Texture2D* emission;
         Sampler* sampler;
         float alphaThreshold;
-        
 
         void setup() const override;
         void deserialize(const nlohmann::json& data) override;

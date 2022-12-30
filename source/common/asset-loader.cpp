@@ -90,6 +90,9 @@ namespace our {
         if(data.is_object()){
             for(auto& [name, desc] : data.items()){
                 std::string type = desc.value("type", "");
+                std::printf("****created ");
+                std::printf(type.c_str());
+                std::printf(" material****\n");
                 auto material = createMaterialFromType(type);
                 material->deserialize(desc);
                 assets[name] = material;
