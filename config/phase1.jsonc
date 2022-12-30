@@ -30,15 +30,13 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png",
-                "maze_cube": "assets/textures/Grass_Block_TEX.png"
+                "monkey": "assets/textures/monkey.png"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
                 "monkey": "assets/models/monkey.obj",
                 "plane": "assets/models/plane.obj",
-                "sphere": "assets/models/sphere.obj",
-                "maze_cube": "assets/models/Grass_Block.obj"
+                "sphere": "assets/models/sphere.obj"
             },
             "samplers":{
                 "default":{},
@@ -97,21 +95,6 @@
                     "texture": "grass",
                     "sampler": "default"
                 },
-                "maze_cube_tex":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "maze_cube_tex",
-                    "sampler": "default"
-                },
                 "monkey":{
                     "type": "textured",
                     "shader": "textured",
@@ -146,8 +129,7 @@
         },
         "world":[
             {
-                "position": [15, 1, 7.5],
-                "rotation": [0, 90, 0],
+                "position": [0, 0, 10],
                 "components": [
                     {
                         "type": "Camera"
@@ -155,113 +137,122 @@
                     {
                         "type": "Free Camera Controller"
                     }
+                ],
+                "children": [
+                    {
+                        "position": [1, -1, -1],
+                        "rotation": [45, 45, 0],
+                        "scale": [0.1, 0.1, 1.0],
+                        "components": [
+                            {
+                                "type": "Mesh Renderer",
+                                "mesh": "cube",
+                                "material": "metal"
+                            }
+                        ]
+                    }
                 ]
             },
             {
-                "position": [10, 0, 7.5],
-                "rotation": [0, 0, 0],
-                "scale": [0.2, 1, 7.5],
+                "rotation": [-45, 0, 0],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
+                        "mesh": "monkey",
+                        "material": "monkey"
+                    },
+                    {
+                        "type": "Movement",
+                        "linearVelocity": [0, 0.1, 0],
+                        "angularVelocity": [0, 45, 0]
+                    }
+                ]
+            },
+            {
+                "position": [0, -1, 0],
+                "rotation": [-90, 0, 0],
+                "scale": [10, 10, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
                         "material": "grass"
                     }
                 ]
             },
             {
-                "position": [10, 0, 15],
+                "position": [0, 1, 2],
                 "rotation": [0, 0, 0],
-                "scale": [5, 1, 0.2],
+                "scale": [2, 2, 2],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
+                        "mesh": "plane",
+                        "material": "glass"
                     }
                 ]
             },
             {
-                "position": [5, 0, 10],
+                "position": [0, 1, -2],
                 "rotation": [0, 0, 0],
-                "scale": [0.2, 1, 5],
+                "scale": [2, 2, 2],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
+                        "mesh": "plane",
+                        "material": "glass"
                     }
                 ]
             },
             {
-                "position": [17.5, 0, 10],
-                "rotation": [0, 0, 0],
-                "scale": [2.5, 1, 0.2],
+                "position": [2, 1, 0],
+                "rotation": [0, 90, 0],
+                "scale": [2, 2, 2],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
+                        "mesh": "plane",
+                        "material": "glass"
                     }
                 ]
             },
             {
-                "position": [12.5, 0, 5],
-                "rotation": [0, 0, 0],
-                "scale": [2.5, 1, 0.2],
+                "position": [-2, 1, 0],
+                "rotation": [0, 90, 0],
+                "scale": [2, 2, 2],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
+                        "mesh": "plane",
+                        "material": "glass"
                     }
                 ]
             },
             {
-                "position": [10, 0, 0],
-                "rotation": [0, 0, 0],
-                "scale": [10, 1, 1],
+                "position": [0, 3, 0],
+                "rotation": [90, 0, 0],
+                "scale": [2, 2, 2],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
+                        "mesh": "plane",
+                        "material": "glass"
                     }
                 ]
             },
             {
-                "position": [10, 0, 20],
-                "rotation": [0, 0, 0],
-                "scale": [10, 1, 1],
+                "position": [0, 10, 0],
+                "rotation": [45, 45, 0],
+                "scale": [5, 5, 5],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 0, 10],
-                "rotation": [0, 0, 0],
-                "scale": [1, 1, 10],
-                "components": [
+                        "mesh": "sphere",
+                        "material": "moon"
+                    },
                     {
-                        "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
-                    }
-                ]
-            },
-            {
-                "position": [20, 0, 10],
-                "rotation": [0, 0, 0],
-                "scale": [1, 1, 10],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "maze_cube",
-                        "material": "grass"
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
                     }
                 ]
             }
