@@ -264,6 +264,18 @@
                         "material": "grass"
                     }
                 ]
+            },
+            {
+                "position": [0, 0, 0],
+                "rotation": [0, 0, 0],
+                "scale": [20, 0.2, 20],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "maze_cube",
+                        "material": "metal"
+                    }
+                ]
             }
         ]
     }
