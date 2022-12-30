@@ -54,25 +54,33 @@ namespace our {
         if(config.contains("postprocess")){
             //TODO: (Req 11) Create a framebuffer
             glGenFramebuffers(1, &postprocessFrameBuffer);
-            glBindFramebuffer(GL_FRAMEBUFFER, postprocessFrameBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
+            // glBindFramebuffer(GL_FRAMEBUFFER, postprocessFrameBuffer);
             //TODO: (Req 11) Create a color and a depth texture and attach them to the framebuffer
             // GLuint ctext, dtext;
-            colorTarget = new our::Texture2D();
-            depthTarget = new our::Texture2D();
-            colorTarget->bind();
-            GLuint mip_levels = glm::floor(glm::log2(glm::max<float>(windowSize.x, windowSize.y))) + 1;
-            glTexStorage2D(GL_TEXTURE_2D,mip_levels,GL_RGBA8,windowSize.x,windowSize.y);
-            
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(),0);
-            depthTarget->bind();
-            glTexStorage2D(GL_TEXTURE_2D,1,GL_DEPTH_COMPONENT24,windowSize.x,windowSize.y);
+            // colorTarget = new our::Texture2D();
+            // depthTarget = new our::Texture2D();
 
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
-            // Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
-            // The depth format can be (Depth component with 24 bits).
+            // // colorTarget->bind();
+            // GLuint mip_levels = glm::floor(glm::log2(glm::max<float>(windowSize.x, windowSize.y))) + 1;
+            // glTexStorage2D(GL_TEXTURE_2D,mip_levels,GL_RGBA8,windowSize.x,windowSize.y);
+            
+            // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(),0);
+            // // depthTarget->bind();
+            // glTexStorage2D(GL_TEXTURE_2D,1,GL_DEPTH_COMPONENT24,windowSize.x,windowSize.y);
+
+            // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
+            // // Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
+            // // The depth format can be (Depth component with 24 bits).
+            colorTarget = texture_utils::empty(GL_RGBA8, windowSize);
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(), 0);
+
+            depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT24, windowSize);
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
 
             //TODO: (Req 11) Unbind the framebuffer just to be safe
-            glBindFramebuffer(GL_FRAMEBUFFER,0);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
+            // glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             // Create a vertex array to use for drawing the texture
             glGenVertexArrays(1, &postProcessVertexArray);
 
@@ -192,7 +200,7 @@ namespace our {
         if (postprocessMaterial)
         {
             //TODO: (Req 11) bind the framebuffer
-            glBindFramebuffer(GL_FRAMEBUFFER, postprocessFrameBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
         }
 
         //TODO: (Req 9) Clear the color and depth buffers
@@ -206,71 +214,72 @@ namespace our {
         {
             std::printf("drawcommand loop\n");
             elemental.material->setup();
-            glm::mat4 transformater = VP * elemental.localToWorld;
+            // we remove the multiplication in the VP for lit materials as it is done inside the vertex shader
+            glm::mat4 transformater = elemental.localToWorld;
             elemental.material->shader->set("transform",transformater);
             // ----------------------------------------------------------------------
             // TODO: Add support for lighting in the forward renderer
-            // setting all the uniforms used in the the light shaders (vertex and fragment)
+            // // setting all the uniforms used in the the light shaders (vertex and fragment)
             elemental.material->shader->set("transform_IT", glm::transpose(glm::inverse(transformater)));
 			elemental.material->shader->set("VP", VP);
 			glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
 			elemental.material->shader->set("eye", glm::vec3(eye));
 
-            // we loop over all the light componants that we pushed back into the list and send them to the fragment shader
-            int light_index = 0;
-			const int MAX_LIGHT_COUNT = 8;
+            // // we loop over all the light componants that we pushed back into the list and send them to the fragment shader
+            // int light_index = 0;
+			// const int MAX_LIGHT_COUNT = 8;
             
-			for (const auto &light : lights)
-            {
-                std::printf("light loop\n");
-                std::string lightByIndex = "lights[" + std::to_string(light_index) + "].";
-                // setting up the light's type
-                elemental.material->shader->set(lightByIndex + "type",static_cast<int>(light->lightType));
-                // setting up the light's color
-                elemental.material->shader->set(lightByIndex + "color", glm::normalize(light->color));
+			// for (const auto &light : lights)
+            // {
+            //     std::printf("light loop\n");
+            //     std::string lightByIndex = "lights[" + std::to_string(light_index) + "].";
+            //     // setting up the light's type
+            //     elemental.material->shader->set(lightByIndex + "type",static_cast<int>(light->lightType));
+            //     // setting up the light's color
+            //     elemental.material->shader->set(lightByIndex + "color", glm::normalize(light->color));
 
-                // the rest of the setup is different according to the light type
-                switch (light->lightType) {
-                case LightType::DIRECTIONAL:
-                    std::printf("we have directional light\n");
-                    // setting up the light's direction based on the owner entity's direction and the light's own direction
-                    glm::vec4 dir=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
-                    elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir));
-                    break;
+            //     // the rest of the setup is different according to the light type
+            //     switch (light->lightType) {
+            //     case LightType::DIRECTIONAL:
+            //         std::printf("we have directional light\n");
+            //         // setting up the light's direction based on the owner entity's direction and the light's own direction
+            //         glm::vec4 dir=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
+            //         elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir));
+            //         break;
                 
-                case LightType::POINT:
-                    // setting up the light's position which is based on the position of the owner entity
-                    glm::vec4 ownerPosition=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
-                    elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition));
-                    // setting up the light's attenuation constants
-                    elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
-                    elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
-                    elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
-                    break;
-                case LightType::SPOT:
-                    // setting up the light's direction based on the owner entity's direction and the light's own direction
-                    glm::vec4 dir2=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
-                    elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir2));
-                    // setting up the light's position which is based on the position of the owner entity
-                    glm::vec4 ownerPosition2=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
-                    elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition2));
-                    // setting up the light's attenuation constants
-                    elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
-                    elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
-                    elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
-                    // setting up the light's cone angles
-                    elemental.material->shader->set(lightByIndex + "inner_angle", glm::radians(light->inner_angle));
-                    elemental.material->shader->set(lightByIndex + "outer_angle", glm::radians(light->outer_angle));
-                    break;
-                }
-                // imcrementing the index
-                light_index++;
-                // break the loop if we reach the maximum number of lights
-				if (light_index >= MAX_LIGHT_COUNT)
-					break;
+            //     case LightType::POINT:
+            //         // setting up the light's position which is based on the position of the owner entity
+            //         glm::vec4 ownerPosition=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
+            //         elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition));
+            //         // setting up the light's attenuation constants
+            //         elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
+            //         elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
+            //         elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
+            //         break;
+            //     case LightType::SPOT:
+            //         // setting up the light's direction based on the owner entity's direction and the light's own direction
+            //         glm::vec4 dir2=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
+            //         elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir2));
+            //         // setting up the light's position which is based on the position of the owner entity
+            //         glm::vec4 ownerPosition2=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
+            //         elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition2));
+            //         // setting up the light's attenuation constants
+            //         elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
+            //         elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
+            //         elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
+            //         // setting up the light's cone angles
+            //         elemental.material->shader->set(lightByIndex + "inner_angle", glm::radians(light->inner_angle));
+            //         elemental.material->shader->set(lightByIndex + "outer_angle", glm::radians(light->outer_angle));
+            //         break;
+            //     }
+            //     // imcrementing the index
+            //     light_index++;
+            //     // break the loop if we reach the maximum number of lights
+			// 	if (light_index >= MAX_LIGHT_COUNT)
+			// 		break;
 
-            }
-            elemental.material->shader->set("light_count",light_index);
+            // }
+            // elemental.material->shader->set("light_count",light_index);
             // last step would be to draw the material
              elemental.mesh->draw();
         }
@@ -316,11 +325,11 @@ namespace our {
         // If there is a postprocess material, apply postprocessing
         if(postprocessMaterial){
             //TODO: (Req 11) Return to the default framebuffer
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             // TODO: (Req 11) Setup the postprocess material and draw the fullscreen triangle
             postprocessMaterial->setup();
             glBindVertexArray(postProcessVertexArray);
-            glDrawArrays(GL_TRIANGLES,GLint(0),GLsizei(3));
+            glDrawArrays(GL_TRIANGLES,0,3);
         }
     }
 

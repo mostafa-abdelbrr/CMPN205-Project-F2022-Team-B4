@@ -42,7 +42,7 @@ struct Light {
 uniform Light lights[MAX_LIGHT_COUNT];
 uniform int light_count;
 uniform Material material;
-
+uniform sampler2D tex;
 void main(){
 
     vec3 normal = normalize(fs_in.normal);//normal on point
@@ -100,4 +100,5 @@ void main(){
         accumulated_light+= (diffuse + specular) * attenuation; // + ambient;
     }
     frag_color = fs_in.color * vec4(accumulated_light, 1.0f);
+    
 }

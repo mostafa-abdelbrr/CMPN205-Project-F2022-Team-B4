@@ -53,6 +53,7 @@ namespace our {
             sampler->bind(0);
         }
         shader->set("tex", 0);
+        
     }
 
     // This function read the material data from a json object
@@ -68,7 +69,9 @@ namespace our {
     
         // This function calls the setup of its parent function 
         Material::setup();
-        // setting the alpha threshold
+        std::printf("lit material SETUP\n");
+        // // setting the alpha threshold
+        std::printf("sending data to shader\n");
         shader->set("alphaThreshold", alphaThreshold);
 
         // making all the seting up for the sampler and all the textures
@@ -76,24 +79,26 @@ namespace our {
         glActiveTexture(GL_TEXTURE0);
         albedo->bind();
         // binding the Texture material sampler to the texture at the texture unit 0 
+         if (sampler) 
         sampler->bind(0);
         // send the unit number to the uniform variable "material.albedo"
         shader->set("material.albedo", 0);
-        std::printf("sending data to shader\n");
-        int i=shader->getUniformLocation("material.albedo");
-        std::printf("material.albedo is in %d \n",i);
+        
+        
         // bing the sampler an texture for the specular
         glActiveTexture(GL_TEXTURE1);
         specular->bind();
         // binding the Texture material sampler to the texture at the texture unit 1 
+         if (sampler) 
         sampler->bind(1);
         // send the unit number to the uniform variable "material.specular"
         shader->set("material.specular", 1);
-
+        
         // bing the sampler an texture for the roughness
         glActiveTexture(GL_TEXTURE2);
         roughness->bind();
         // binding the Texture material sampler to the texture at the texture unit 2 
+         if (sampler) 
         sampler->bind(2);
          // send the unit number to the uniform variable "material.roughness"
         shader->set("material.roughness", 2);
@@ -102,6 +107,7 @@ namespace our {
         glActiveTexture(GL_TEXTURE3);
         ambient_occlusion->bind();
         // binding the Texture material sampler to the texture at the texture unit 2 
+         if (sampler) 
         sampler->bind(3);
          // send the unit number to the uniform variable "material.ambient_oclusion"
         shader->set("material.ambient_occlusion", 3);
@@ -109,23 +115,25 @@ namespace our {
         // bing the sampler an texture for the emission
         glActiveTexture(GL_TEXTURE4);
         emission->bind();
-        // binding the Texture material sampler to the texture at the texture unit 2 
+        // binding the Texture material sampler to the texture at the texture unit 2
+         if (sampler)  
         sampler->bind(4);
          // send the unit number to the uniform variable "material.emission"
         shader->set("material.emission", 4); 
+        
+       
     }
 
     // This function read the material data from a json object
     void LitMaterial::deserialize(const nlohmann::json& data)
     {
         // deserializing the data of the material itself->parent class of the lit material
-         Material::deserialize(data);
-        std::printf("lit material deserialization---------------------------------------\n");
+        Material::deserialize(data);
+        std::printf("-------------------lit material deserialization----------------------\n");
         if(!data.is_object())
          return;
         // getting the data from the json file
         alphaThreshold = data.value("alphaThreshold", 0.0f);
-        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
         std::printf("albedo=\n");
         albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
         std::printf("specular\n");
@@ -136,7 +144,8 @@ namespace our {
         ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
         std::printf("emission\n");
         emission = AssetLoader<Texture2D>::get(data.value("emission", ""));
-
+        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+        
     }
 
 }

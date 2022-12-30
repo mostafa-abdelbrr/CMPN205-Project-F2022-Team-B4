@@ -11,8 +11,8 @@
     },
     "scene": {
         "renderer":{
-            "sky": "assets/textures/sky.jpg",
-            "postprocess": "assets/shaders/postprocess/vignette.frag"
+            // "sky": "assets/textures/sky.jpg",
+            // "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets":{
             "shaders":{
@@ -49,77 +49,57 @@
                 }
             },
             "materials":{
-                "metal":{
-                    "type": "tinted",
-                    "shader": "tinted",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [0.45, 0.4, 0.5, 1]
-                },
-                "glass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        },
-                        "blending":{
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
-                    },
-                    "transparent": true,
-                    "tint": [1, 1, 1, 1],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
-                "grass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "grass",
-                    "sampler": "default"
-                },
+                // "metal":{
+                //     "type": "tinted",
+                //     "shader": "tinted",
+                //     "pipelineState": {
+                //         "faceCulling":{
+                //             "enabled": false
+                //         },
+                //         "depthTesting":{
+                //             "enabled": true
+                //         }
+                //     },
+                //     "tint": [0.45, 0.4, 0.5, 1]
+                // },
+                // "glass":{
+                //     "type": "textured",
+                //     "shader": "textured",
+                //     "pipelineState": {
+                //         "faceCulling":{
+                //             "enabled": false
+                //         },
+                //         "depthTesting":{
+                //             "enabled": true
+                //         },
+                //         "blending":{
+                //             "enabled": true,
+                //             "sourceFactor": "GL_SRC_ALPHA",
+                //             "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                //         },
+                //         "depthMask": false
+                //     },
+                //     "transparent": true,
+                //     "tint": [1, 1, 1, 1],
+                //     "texture": "glass",
+                //     "sampler": "pixelated"
+                // },
+                // "grass":{
+                //     "type": "textured",
+                //     "shader": "textured",
+                //     "pipelineState": {
+                //         "faceCulling":{
+                //             "enabled": false
+                //         },
+                //         "depthTesting":{
+                //             "enabled": true
+                //         }
+                //     },
+                //     "tint": [1, 1, 1, 1],
+                //     "texture": "grass",
+                //     "sampler": "default"
+                // },
                 "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture":"monkey",
-                    // "albedo": "monkey",
-                    // "specular": "monkey",
-                    // "roughness": "monkey",
-                    // "ambient_occlusion": "monkey",
-                    // "emission": "monkey",
-                    "sampler": "default"
-                },
-                "moon":{
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
@@ -130,13 +110,33 @@
                             "enabled": true
                         }
                     },
+                    // "tint": [1, 1, 1, 1],
+                    // "texture":"monkey",
+                    "albedo": "monkey",
+                    "specular": "monkey",
+                    "roughness": "monkey",
+                    "ambient_occlusion": "monkey",
+                    "emission": "monkey",
+                    "sampler": "default"
+                },
+                "moon":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
                     "tint": [1, 1, 1, 1],
                     "texture":"moon",
-                    "albedo":"moon",
-                    "specular":"moon",
-                    "roughness":"moon",
-                    "ambient_occlusion": "moon",
-                    "emission": "moon",
+                    // "albedo":"moon",
+                    // "specular":"moon",
+                    // "roughness":"moon",
+                    // "ambient_occlusion": "moon",
+                    // "emission": "moon",
                     "sampler": "default"
                 }
                 
@@ -203,7 +203,8 @@
                        
                     }
                 ]
-            } ,
+            }
+             ,
             {
                 "position": [0, 4, 0],
                 "rotation": [45, 45, 0],
@@ -212,7 +213,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "sphere",
-                        "material": "moon"
+                        "material": "monkey"
                     },
                     {
                         "type": "Movement",
