@@ -20,7 +20,7 @@ namespace our
     class FreeCameraControllerSystem {
         Application* app; // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
-        int margin = 0.2;
+        double margin = 0.2;
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -28,8 +28,10 @@ namespace our
             this->app = app;
         }
 
-        // Check for AABB collision before allowing the camera to move..
-        bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, int margin=1){
+        // Check for AABB collision before allowing the camera to move.
+        // AABB collision simply checks if the player position is within the boundaries of the other entity.
+        // If it is within the boundaries, return true (collision occured), otherwise return false.
+        bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, double margin=1){
             if(
                 player[0] + margin > entity[0] - scale[0] &&
                 player[0] - margin < entity[0] + scale[0] &&
@@ -75,6 +77,7 @@ namespace our
             // and use it to update the camera rotation
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1)){
                 glm::vec2 delta = app->getMouse().getMouseDelta();
+                // Disable pitch because this is a 2D maze, hence no movement up and down is allowed by the player.
                 // rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
                 rotation.y -= delta.x * controller->rotationSensitivity; // The x-axis controls the yaw
             }
@@ -105,10 +108,15 @@ namespace our
             // We change the camera position based on the keys WASD/QE
             // S & W moves the player back and forth
             if(app->getKeyboard().isPressed(GLFW_KEY_W)) {
+                // Save the new position, then for each entity check if the other entity's collision data member is true
+                // which means that this object is supposed to be checked for collision, otherwise ignore. The only thing
+                // with collision set to false is the ground because otherwise it will always collide since it doesn't check
+                // in 3D, hence in 2D the object always collides.
+                // Only if no collision occurs with any entity, update the position.
                 glm::vec3 new_position = position + front * (deltaTime * current_sensitivity.z);
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
-                        if (other_entity != entity){
+                        if (other_entity != entity && other_entity->collision) {
                             if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
@@ -120,10 +128,15 @@ namespace our
             }
             if(app->getKeyboard().isPressed(GLFW_KEY_S)) 
             {
+                // Save the new position, then for each entity check if the other entity's collision data member is true
+                // which means that this object is supposed to be checked for collision, otherwise ignore. The only thing
+                // with collision set to false is the ground because otherwise it will always collide since it doesn't check
+                // in 3D, hence in 2D the object always collides.
+                // Only if no collision occurs with any entity, update the position.
                 glm::vec3 new_position = position - front * (deltaTime * current_sensitivity.z);
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
-                        if (other_entity != entity){
+                        if (other_entity != entity && other_entity->collision) {
                             if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
@@ -133,15 +146,21 @@ namespace our
                         position = new_position;
                     }
             }
+            // Q & E are now disabled because this is a 2D maze, no up and down movement allowed.
             // Q & E moves the player up and down
-            if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
-            if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
+            // if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
+            // if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
             // A & D moves the player left or right 
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) {
+                // Save the new position, then for each entity check if the other entity's collision data member is true
+                // which means that this object is supposed to be checked for collision, otherwise ignore. The only thing
+                // with collision set to false is the ground because otherwise it will always collide since it doesn't check
+                // in 3D, hence in 2D the object always collides.
+                // Only if no collision occurs with any entity, update the position.
                 glm::vec3 new_position = position + right * (deltaTime * current_sensitivity.x);
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
-                        if (other_entity != entity){
+                        if (other_entity != entity && other_entity->collision) {
                             if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }
@@ -152,10 +171,15 @@ namespace our
                     }
             }
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) {
+                // Save the new position, then for each entity check if the other entity's collision data member is true
+                // which means that this object is supposed to be checked for collision, otherwise ignore. The only thing
+                // with collision set to false is the ground because otherwise it will always collide since it doesn't check
+                // in 3D, hence in 2D the object always collides.
+                // Only if no collision occurs with any entity, update the position.
                 glm::vec3 new_position = position - right * (deltaTime * current_sensitivity.x);
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
-                        if (other_entity != entity){
+                        if (other_entity != entity && other_entity->collision) {
                             if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
                                 collision = true;
                             }

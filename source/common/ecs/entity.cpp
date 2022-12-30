@@ -26,6 +26,10 @@ namespace our {
         if(!data.is_object()) return;
         name = data.value("name", name);
         localTransform.deserialize(data);
+        // Check if entity has a collision component to determine whether to check for it or not while moving. Default is true.
+        if(data.contains("collision")){
+            collision = data.value("collision", collision);
+        }
         if(data.contains("components")){
             if(const auto& components = data["components"]; components.is_array()){
                 for(auto& component: components){
