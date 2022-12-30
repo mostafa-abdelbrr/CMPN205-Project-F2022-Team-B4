@@ -45,13 +45,13 @@ namespace our {
         //TODO: (Req 7) Write this function
         TintedMaterial::setup();
         shader->set("alphaThreshold", alphaThreshold);
-        if (texture) {
-        texture->bind();
-        }
+        if (texture) texture->bind();
+        else Texture2D::unbind();
+        
         // sampler->bind(texture->getOpenGLName());
-        if (sampler) {
-            sampler->bind(0);
-        }
+        if (sampler) sampler->bind(0);
+        else Sampler::unbind(0);
+        
         shader->set("tex", 0);
         
     }

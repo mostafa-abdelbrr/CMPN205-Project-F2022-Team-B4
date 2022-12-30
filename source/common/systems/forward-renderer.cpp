@@ -215,11 +215,12 @@ namespace our {
             std::printf("drawcommand loop\n");
             elemental.material->setup();
             // we remove the multiplication in the VP for lit materials as it is done inside the vertex shader
-            glm::mat4 transformater =  elemental.localToWorld;
+            glm::mat4 transformater =  VP*elemental.localToWorld;
             elemental.material->shader->set("transform",transformater);
             // ----------------------------------------------------------------------
             // TODO: Add support for lighting in the forward renderer
             // // setting all the uniforms used in the the light shaders (vertex and fragment)
+            elemental.material->shader->set("model", elemental.localToWorld);
             elemental.material->shader->set("transform_IT", glm::transpose(glm::inverse(transformater)));
 			elemental.material->shader->set("VP", VP);
 			glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);

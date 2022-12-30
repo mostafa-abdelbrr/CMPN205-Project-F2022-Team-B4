@@ -60,7 +60,8 @@
                             "enabled": true
                         }
                     },
-                    "tint": [0.45, 0.4, 0.5, 1]
+                    "tint": [0.45, 0.4, 0.5, 1],
+                    "transparent": true
                 },
                 "glass":{
                     "type": "textured",
@@ -85,8 +86,8 @@
                     "sampler": "pixelated"
                 },
                 "grass":{
-                    "type": "lit",
-                    "shader": "lit",
+                    "type": "textured",
+                    "shader": "textured",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -95,16 +96,18 @@
                             "enabled": true
                         }
                     },
-                    "albedo": "grass",
-                    "specular": "grass",
-                    "roughness": "grass",
-                    "ambient_occlusion": "grass",
-                    "emission": "grass",
+                    // "albedo": "grass",
+                    // "specular": "grass",
+                    // "roughness": "grass",
+                    // "ambient_occlusion": "grass",
+                    // "emission": "grass",
+                    "tint": [1, 1, 1, 1],
+                    "texture": "grass",
                     "sampler": "default"
                 },
                 "monkey":{
-                    "type": "lit",
-                    "shader": "lit",
+                    "type": "textured",
+                    "shader": "textured",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -113,11 +116,13 @@
                             "enabled": true
                         }
                     },
-                    "albedo": "monkey",
-                    "specular": "monkey",
-                    "roughness": "monkey",
-                    "ambient_occlusion": "monkey",
-                    "emission": "monkey",
+                    // "albedo": "monkey",
+                    // "specular": "monkey",
+                    // "roughness": "monkey",
+                    // "ambient_occlusion": "monkey",
+                    // "emission": "monkey",
+                    "tint": [1, 1, 1, 1],
+                    "texture": "monkey",
                     "sampler": "default"
                 },
                 "moon":{
@@ -217,7 +222,7 @@
                 ]
             },
             {
-                "position": [0,15,0 ],
+                "position": [0,25,0 ],
                 "name": "spot",
                 "components": [
                     {
