@@ -67,38 +67,41 @@ void main(){
     for(int i = 0; i < count; i++){
         Light light = lights[i];
 
-        vec3 light_vec = - light.direction;//as lambart assume light direction from point to light
+        vec3 light_direction;
         float attenuation = 1;
-
+        if(light.type == DIRECTIONAL)
+            light_direction = light.direction;
         // the following calculations, like attenuation and position are only done for point and spot lights
-        if(light.type != DIRECTIONAL){
-
-            light_vec = normalize(light.position - fs_in.world);
-
+        else {
+            light_direction = fs_in.world - light.position;
+            float distance = length(light_direction);
+            light_direction /= distance;
             // attenuation is only computed if the light is not directional
-            float d = distance(light.position, fs_in.world);
-            attenuation =attenuation*( 1 / (light.attenuation_constant +(light.attenuation_linear * d) + light.attenuation_quadratic * d * d));
-            
+            attenuation *= 1.0f / (light.attenuation_constant +
+                            light.attenuation_linear * distance +
+                            light.attenuation_quadratic * distance * distance);
             if(light.type == SPOT){
                 // If it is a spot light, compute the angle attenuation.
                 // outside the outer cone light is 0 inside the inner cone light is at full ingtensity and between
                 // the 2 angles light is gradually decreasing in intensity
-                float angle = acos(-dot(light.direction, light_vec));
+                float angle = acos(dot(light.direction, light_direction));
                 attenuation *= smoothstep(light.outer_angle, light.inner_angle, angle);
-            }
-        }
-         vec3 reflected = reflect(-light_vec, normal);
+         }
+      }
+
+         vec3 reflected = reflect(light_direction, normal);
         // we prepare the lambert and the phong equations used in the 2 light componants
-        float lambert = max(0.0f, dot(normal, light_vec));
+        float lambert = max(0.0f, dot(normal,  -light_direction));
         float phong = pow(max(0.0f, dot(view, reflected)),shininess);
 
         // Now we compute the 2 components of the light separately.
         vec3 diffuse = material_albedo * light.color * lambert;
-        vec3 specular = material_specular * light.color * phong;
+        vec3 specular = material_specular * light.color* phong;
 
         // Then we accumulate the light components additively.
         accumulated_light+= (diffuse + specular) * attenuation; // + ambient;
     }
     frag_color = fs_in.color * vec4(accumulated_light, 1.0f);
-    
+    // frag_color = vec4(1.0f, 1.0f, 1.0f, 1.0f) * fs_in.color * texture(material.specular, fs_in.tex_coord);
+    // // frag_color =vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }
