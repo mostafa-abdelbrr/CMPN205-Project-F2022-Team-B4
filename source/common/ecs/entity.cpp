@@ -26,9 +26,13 @@ namespace our {
         if(!data.is_object()) return;
         name = data.value("name", name);
         localTransform.deserialize(data);
-        // Check if entity has a collision component to determine whether to check for it or not while moving. Default is true.
+        // Check if entity has a collision flag to determine whether to check for it or not while moving. Default is true.
         if(data.contains("collision")){
             collision = data.value("collision", collision);
+        }
+        // Check if entity has a win flag to determine if this is the end point of the game to show the win state.
+        if(data.contains("win")){
+            win = data.value("win", win);
         }
         if(data.contains("components")){
             if(const auto& components = data["components"]; components.is_array()){

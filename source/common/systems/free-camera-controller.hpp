@@ -31,8 +31,13 @@ namespace our
         // Check for AABB collision before allowing the camera to move.
         // AABB collision simply checks if the player position is within the boundaries of the other entity.
         // If it is within the boundaries, return true (collision occured), otherwise return false.
-        bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, double margin=1){
-            if(
+        // Also check the win data member of the other entity, if it is true, then skip the collision check and display the win state.
+        bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, double margin=1, bool win = false){
+            if (win){
+                // Display win state
+
+            }
+            else if(
                 player[0] + margin > entity[0] - scale[0] &&
                 player[0] - margin < entity[0] + scale[0] &&
                 player[2] + margin > entity[2] - scale[2] && 
@@ -117,7 +122,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity && other_entity->collision) {
-                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win)) {
                                 collision = true;
                             }
                         }
@@ -137,7 +142,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity && other_entity->collision) {
-                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win)) {
                                 collision = true;
                             }
                         }
@@ -161,7 +166,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity && other_entity->collision) {
-                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win)) {
                                 collision = true;
                             }
                         }
@@ -180,7 +185,7 @@ namespace our
                     bool collision = false;
                     for(auto other_entity : world->getEntities()){
                         if (other_entity != entity && other_entity->collision) {
-                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin)) {
+                            if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win)) {
                                 collision = true;
                             }
                         }

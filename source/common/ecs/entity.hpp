@@ -24,6 +24,7 @@ namespace our {
         Transform localTransform; // The transform of this entity relative to its parent.
         
         bool collision = true; // If true, check for collision with this entity, otherwise ignore. Default is true.
+        bool win = false; // If true, check for collision with this entity and if it collides, display the win state. Default is false.
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 
