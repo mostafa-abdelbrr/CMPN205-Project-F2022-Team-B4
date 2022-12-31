@@ -70,9 +70,8 @@ namespace our {
     
         // This function calls the setup of its parent function 
         Material::setup();
-        std::printf("lit material SETUP\n");
+        
         // // setting the alpha threshold
-        std::printf("sending data to shader\n");
         shader->set("alphaThreshold", alphaThreshold);
 
         // making all the seting up for the sampler and all the textures
@@ -135,20 +134,14 @@ namespace our {
     {
         // deserializing the data of the material itself->parent class of the lit material
         Material::deserialize(data);
-        std::printf("-------------------lit material deserialization----------------------\n");
         if(!data.is_object())
          return;
         // getting the data from the json file
         alphaThreshold = data.value("alphaThreshold", 0.0f);
-        std::printf("albedo\n");
         albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
-        std::printf("specular\n");
         specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
-        std::printf("roughness\n");
         roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
-        std::printf("ambient_occlusion\n");
         ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
-        std::printf("emission\n");
         emission = AssetLoader<Texture2D>::get(data.value("emission", ""));
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
         

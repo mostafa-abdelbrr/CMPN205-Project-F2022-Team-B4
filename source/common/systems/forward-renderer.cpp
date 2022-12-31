@@ -136,15 +136,12 @@ namespace our {
         opaqueCommands.clear();
         transparentCommands.clear();
         lights.clear();
-        int i=1;
+        
         for(auto entity : world->getEntities()){
-             std::printf("--------------------we have %d entity----------------------\n",i);
-             i++;
             // TODO: Add support for lighting in the forward renderer
             // if the entity has a light componant we store it in the lights list->so it could be sent to the shaders
              if(auto light = entity->getComponent<LightComponent>())
                 {
-                    std::printf("ENTITY IS light\n");
                         lights.push_back(light);
                 }
                 
@@ -213,7 +210,7 @@ namespace our {
 
         for (auto elemental : opaqueCommands)
         {
-            std::printf("drawcommand loop\n");
+
             // setting up the element's material
             elemental.material->setup();
             // setting the transform matrix in the shader
@@ -236,17 +233,14 @@ namespace our {
             
 			for (int i = 0; i < (int)lights.size(); i++)
             {
-                std::printf("light loop\n");
                 std::string lightByIndex = "lights[" + std::to_string(i) + "].";
                 // setting up the light's type
                 elemental.material->shader->set(lightByIndex + "type",static_cast<int>(lights[i]->lightType));
                 // setting up the light's color
                 elemental.material->shader->set(lightByIndex + "color", lights[i]->color);
-                
                 elemental.material->shader->set(lightByIndex + "diffuse", lights[i]->diffuse); 
-                
                 elemental.material->shader->set(lightByIndex + "specular", lights[i]->specular);
-                std::cout<<"specular:"<<lights[i]->specular.x<<lights[i]->specular.y<<lights[i]->specular.z<<std::endl;
+                
                 // setting up the light's direction based on the owner entity's direction and the light's own direction
                 
                 glm::vec4 dir=lights[i]->getOwner()->getLocalToWorldMatrix() *glm::vec4(0,1,0,0);
@@ -266,18 +260,7 @@ namespace our {
                 elemental.material->shader->set(lightByIndex + "outer_angle", lights[i]->outer_angle);
                    
 
-                // some prints for debugging
-                switch (lights[i]->lightType) {
-                case LightType::DIRECTIONAL:
-                    std::printf("we have DIRECTIONAL light\n");
-                    break;
-                case LightType::POINT:
-                std::printf("we have POINT light\n");
-                    break;
-                case LightType::SPOT:
-                std::printf("we have SPOT light\n");
-                    break;
-                }
+              
             }
             // setting up the light count
             elemental.material->shader->set("light_count",(int)lights.size());
