@@ -35,7 +35,7 @@
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
+                "monkey": "assets/models/H.obj",
                 "plane": "assets/models/plane.obj",
                 "sphere": "assets/models/sphere.obj",
                 "maze_cube": "assets/models/Grass_Block.obj"
@@ -154,6 +154,19 @@
                     },
                     {
                         "type": "Free Camera Controller"
+                    }
+                ]
+            },
+            {
+                "position": [2, 0.5, 10.6],
+                "rotation": [90, 90 , 0],
+                "scale": [ 0.02, -0.02, -0.02],
+                "win": true,
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey",
+                        "material": "glass"
                     }
                 ]
             },

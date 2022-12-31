@@ -34,7 +34,7 @@ namespace our
         // Also check the win data member of the other entity, if it is true, then skip the collision check and display the win state.
         bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, double margin=1, bool win = false){
             if (win){
-                // Display win state
+                //app->changeState("menu");
 
             }
             else if(
