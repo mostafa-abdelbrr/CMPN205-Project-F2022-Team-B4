@@ -20,7 +20,11 @@ namespace our {
     public:
 
         LightType lightType; //the type of light (directional, point, spotlight)
+        // defining data members for diffuse and specular and color of the light
         glm::vec3 color={0.0f,0.0f,0.0f};
+        glm::vec3 diffuse={0.0f,0.0f,0.0f};
+        glm::vec3 specular={0.0f,0.0f,0.0f};
+
         // No data members for the position it's given in the Entity itself
         glm::vec3 direction = {0.0f, 0.0f, 0.0f}; //this direction is used in addition to the owner's entity's direction to get the overall direction
 

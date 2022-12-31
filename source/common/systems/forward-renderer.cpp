@@ -1,6 +1,7 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
+#include <iostream>
 
 namespace our {
 
@@ -213,15 +214,18 @@ namespace our {
         for (auto elemental : opaqueCommands)
         {
             std::printf("drawcommand loop\n");
+            // setting up the element's material
             elemental.material->setup();
-            // we remove the multiplication in the VP for lit materials as it is done inside the vertex shader
+            // setting the transform matrix in the shader
             glm::mat4 transformater =  VP*elemental.localToWorld;
             elemental.material->shader->set("transform",transformater);
             // ----------------------------------------------------------------------
             // TODO: Add support for lighting in the forward renderer
             // // setting all the uniforms used in the the light shaders (vertex and fragment)
+            // the model matrix is sent along with the VP matrix so that the transformation is done inside the shader
+            // since light needs to be applied before the world  transformation
             elemental.material->shader->set("model", elemental.localToWorld);
-            elemental.material->shader->set("transform_IT", glm::transpose(glm::inverse(transformater)));
+            elemental.material->shader->set("model_IT", glm::transpose(glm::inverse(transformater)));
 			elemental.material->shader->set("VP", VP);
 			glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
 			elemental.material->shader->set("eye", glm::vec3(eye));
@@ -230,62 +234,54 @@ namespace our {
             int light_index = 0;
 			const int MAX_LIGHT_COUNT = 8;
             
-			for (const auto &light : lights)
+			for (int i = 0; i < (int)lights.size(); i++)
             {
                 std::printf("light loop\n");
-                std::string lightByIndex = "lights[" + std::to_string(light_index) + "].";
+                std::string lightByIndex = "lights[" + std::to_string(i) + "].";
                 // setting up the light's type
-                elemental.material->shader->set(lightByIndex + "type",static_cast<int>(light->lightType));
+                elemental.material->shader->set(lightByIndex + "type",static_cast<int>(lights[i]->lightType));
                 // setting up the light's color
-                elemental.material->shader->set(lightByIndex + "color", light->color);
-                // elemental.material->shader->set(lightByIndex + "diffuse", light->color.y);   // Phong Model: diffuse
-                // elemental.material->shader->set(lightByIndex + "specular", light->color.z);
-                // elemental.material->shader->set(lightByIndex + "ambient", light->color.x);
+                elemental.material->shader->set(lightByIndex + "color", lights[i]->color);
+                
+                elemental.material->shader->set(lightByIndex + "diffuse", lights[i]->diffuse); 
+                
+                elemental.material->shader->set(lightByIndex + "specular", lights[i]->specular);
+                std::cout<<"specular:"<<lights[i]->specular.x<<lights[i]->specular.y<<lights[i]->specular.z<<std::endl;
+                // setting up the light's direction based on the owner entity's direction and the light's own direction
+                
+                glm::vec4 dir=lights[i]->getOwner()->getLocalToWorldMatrix() *glm::vec4(0,1,0,0);
+                elemental.material->shader->set(lightByIndex + "direction", glm::normalize(glm::vec3(dir)));
+               
+                // setting up the light's position which is based on the position of the owner entity
+                glm::vec4 ownerPosition=lights[i]->getOwner()->getLocalToWorldMatrix()* glm::vec4(lights[i]->getOwner()->localTransform.position, 1);
+                elemental.material->shader->set(lightByIndex + "position", glm::normalize(glm::vec3(ownerPosition)));
 
-                // the rest of the setup is different according to the light type
-                switch (light->lightType) {
+                 // setting up the light's attenuation constants
+                elemental.material->shader->set(lightByIndex + "attenuation_constant", lights[i]->attenuation_constant);
+                elemental.material->shader->set(lightByIndex + "attenuation_linear", lights[i]->attenuation_linear);
+                elemental.material->shader->set(lightByIndex + "attenuation_quadratic", lights[i]->attenuation_quadratic);
+                
+                // setting up the light's cone angles
+                elemental.material->shader->set(lightByIndex + "inner_angle", lights[i]->inner_angle);
+                elemental.material->shader->set(lightByIndex + "outer_angle", lights[i]->outer_angle);
+                   
+
+                // some prints for debugging
+                switch (lights[i]->lightType) {
                 case LightType::DIRECTIONAL:
                     std::printf("we have DIRECTIONAL light\n");
-                    // setting up the light's direction based on the owner entity's direction and the light's own direction
-                    glm::vec4 dir=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
-                    elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir));
                     break;
-                
                 case LightType::POINT:
                 std::printf("we have POINT light\n");
-                    // setting up the light's position which is based on the position of the owner entity
-                    glm::vec4 ownerPosition=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
-                    elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition));
-                    // setting up the light's attenuation constants
-                    elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
-                    elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
-                    elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
                     break;
                 case LightType::SPOT:
                 std::printf("we have SPOT light\n");
-                    // setting up the light's direction based on the owner entity's direction and the light's own direction
-                    glm::vec4 dir2=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 1);
-                    elemental.material->shader->set(lightByIndex + "direction", glm::normalize(dir2));
-                    // setting up the light's position which is based on the position of the owner entity
-                    glm::vec4 ownerPosition2=light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->getOwner()->localTransform.position, 1);
-                    elemental.material->shader->set(lightByIndex + "position", glm::vec3(ownerPosition2));
-                    // setting up the light's attenuation constants
-                    elemental.material->shader->set(lightByIndex + "attenuation_constant", light->attenuation_constant);
-                    elemental.material->shader->set(lightByIndex + "attenuation_linear", light->attenuation_linear);
-                    elemental.material->shader->set(lightByIndex + "attenuation_quadratic", light->attenuation_quadratic);
-                    // setting up the light's cone angles
-                    elemental.material->shader->set(lightByIndex + "inner_angle", glm::radians(light->inner_angle));
-                    elemental.material->shader->set(lightByIndex + "outer_angle", glm::radians(light->outer_angle));
                     break;
                 }
-                // imcrementing the index
-                light_index++;
-                // break the loop if we reach the maximum number of lights
-				if (light_index >= MAX_LIGHT_COUNT)
-					break;
-
             }
-            elemental.material->shader->set("light_count",light_index);
+            // setting up the light count
+            elemental.material->shader->set("light_count",(int)lights.size());
+            
             // last step would be to draw the material
              elemental.mesh->draw();
         }

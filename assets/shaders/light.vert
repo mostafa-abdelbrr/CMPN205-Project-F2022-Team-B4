@@ -7,9 +7,13 @@ layout(location = 1) in vec4 color;
 layout(location = 2) in vec2 tex_coord;
 layout(location = 3) in vec3 normal;
 
+// this is the normal transformation matrix that is used in the textured material
 uniform mat4 transform;
+// thi is the model matrix to transform from the object space to the world space
+// used because in the case of lighting we need to access this coordinate system before the multiplication with VP
 uniform mat4 model;
-uniform mat4 transform_IT;
+// the inverse transform of the model matrix used to get the normal
+uniform mat4 model_IT;
 uniform mat4 VP;
 uniform vec3 eye;
 
@@ -28,7 +32,7 @@ void main() {
     vs_out.world = world;
     gl_Position = VP * vec4(world, 1.0);
 
-    vs_out.normal =normalize( (transform_IT * vec4(normal, 0.0)).xyz);
+    vs_out.normal =normalize( (model * vec4(normal, 0.0)).xyz);
     vs_out.view = eye - world;
     vs_out.color = color;
     vs_out.tex_coord = tex_coord;

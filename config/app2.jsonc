@@ -209,18 +209,65 @@
             },
             {
                 "position": [4,6,3],
+                "rotation":[0,180,0],
                 "name":"sun",
                 "components": [
                     {
                         "type": "Light",
-                        "lightType": 2,         //Spot
-                        "color":[0.1, 0.1, 0.3],
-                        "direction": [ 0, -1.0, 0 ],
+                        "lightType": 0,         //Spot
+                        "color":[1, 1, 1],
+                        "diffuse": [1, 1, 0],
+                        "specular": [1,0.8 , 0.3],
                         "inner_angle": 15.0,
                         "outer_angle":30.0,
-                        "attenuation_constant":0.001,
-                        "attenuation_linear":0.001,
-                        "attenuation_quadratic":0.0001
+                        
+                        "attenuation_constant":0,
+                        "attenuation_linear":0,
+                        "attenuation_quadratic":0.001
+                        
+                    }
+
+                ]
+            },
+            {
+                "position": [4,6,3],
+                "rotation":[0,180,0],
+                "name":"spot",
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": 1,         //Spot
+                        "color":[1, 1, 1],
+                        "diffuse": [1, 1, 0],
+                        "specular": [1,0.8 , 0.3],
+                        "inner_angle": 15.0,
+                        "outer_angle":30.0,
+                        
+                        "attenuation_constant":0,
+                        "attenuation_linear":0,
+                        "attenuation_quadratic":0.001
+                        
+                    }
+
+                ]
+            },
+            {
+                "position": [4,6,3],
+                "rotation":[0,180,0],
+                "name":"point",
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": 2,         //Spot
+                        "color":[1, 1, 1],
+                        "diffuse": [1, 1, 0],
+                        "specular": [1,0.8 , 0.3],
+                        "inner_angle": 15.0,
+                        "outer_angle":30.0,
+                        
+                        "attenuation_constant":0,
+                        "attenuation_linear":0,
+                        "attenuation_quadratic":0.001
                         
                     }
 
