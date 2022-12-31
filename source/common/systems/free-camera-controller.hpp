@@ -31,18 +31,18 @@ namespace our
         // Check for AABB collision before allowing the camera to move.
         // AABB collision simply checks if the player position is within the boundaries of the other entity.
         // If it is within the boundaries, return true (collision occured), otherwise return false.
-        // Also check the win data member of the other entity, if it is true, then skip the collision check and display the win state.
+        // In the collision check, check if the other entity has a win data member (flag), if yes then change the state to win state.
         bool check_collision(glm::vec3 player, glm::vec3 entity, glm::vec3 scale, double margin=1, bool win = false){
-            if (win){
-                //app->changeState("menu");
-
-            }
-            else if(
+            if(
                 player[0] + margin > entity[0] - scale[0] &&
                 player[0] - margin < entity[0] + scale[0] &&
                 player[2] + margin > entity[2] - scale[2] && 
                 player[2] - margin < entity[2] + scale[2]
             ) {
+                if (win){
+                app->changeState("menu");
+
+            }
                 return true;
             }
             return false;
