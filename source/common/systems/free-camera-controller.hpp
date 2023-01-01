@@ -3,6 +3,8 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+#include<iostream>
+using namespace std;
 
 #include "../application.hpp"
 
@@ -22,6 +24,7 @@ namespace our
         Application *app;          // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
         double margin = 0.2;
+        int counter=0;
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -42,10 +45,6 @@ namespace our
                 player[2] + margin > entity[2] - scale[2] &&
                 player[2] - margin < entity[2] + scale[2])
             {
-                if (win)
-                {
-                    app->changeState("menu");
-                }
                 return true;
             }
             return false;
@@ -149,6 +148,8 @@ namespace our
                             collision = true;
                             if (other_entity->collectable)
                             {
+                                counter++;
+                                
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -186,6 +187,7 @@ namespace our
                             collision = true;
                             if (other_entity->collectable)
                             {
+                                counter++;
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -228,6 +230,8 @@ namespace our
                             collision = true;
                             if (other_entity->collectable)
                             {
+                                counter++;
+                                
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -265,6 +269,8 @@ namespace our
                             collision = true;
                             if (other_entity->collectable)
                             {
+                                counter++;
+                                
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -277,6 +283,10 @@ namespace our
                 if (!collision)
                 {
                     position = new_position;
+                }
+                if(counter==3)
+                {
+                    app->changeState("win");
                 }
             }
         }
