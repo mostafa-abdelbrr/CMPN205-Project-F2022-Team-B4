@@ -3,7 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 #include "../application.hpp"
@@ -23,8 +23,7 @@ namespace our
     {
         Application *app;          // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
-        double margin = 0.2;
-        int counter=0;
+        double margin = 0.2;       // margin between player/camera and other entities.
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -137,19 +136,22 @@ namespace our
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position + front * (deltaTime * current_sensitivity.z);
                 bool collision = false;
+                bool foundCollectable = false;
                 auto it = world->getEntities().begin();
                 while (it != world->getEntities().end())
                 {
                     Entity *other_entity = *it;
                     if (other_entity != entity && other_entity->collision)
                     {
+                        if (other_entity->collectable) {
+                                foundCollectable = true;
+                            }
                         if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win))
                         {
                             collision = true;
                             if (other_entity->collectable)
                             {
-                                counter++;
-                                
+
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -162,6 +164,10 @@ namespace our
                 if (!collision)
                 {
                     position = new_position;
+                }
+                if (!foundCollectable)
+                {
+                    app->changeState("win");
                 }
             }
             if (app->getKeyboard().isPressed(GLFW_KEY_S))
@@ -176,18 +182,22 @@ namespace our
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position - front * (deltaTime * current_sensitivity.z);
                 bool collision = false;
+                bool foundCollectable = false;
                 auto it = world->getEntities().begin();
                 while (it != world->getEntities().end())
                 {
                     Entity *other_entity = *it;
                     if (other_entity != entity && other_entity->collision)
                     {
+                        if (other_entity->collectable) {
+                                foundCollectable = true;
+                            }
                         if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win))
                         {
                             collision = true;
                             if (other_entity->collectable)
                             {
-                                counter++;
+
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -200,6 +210,10 @@ namespace our
                 if (!collision)
                 {
                     position = new_position;
+                }
+                if (!foundCollectable)
+                {
+                    app->changeState("win");
                 }
             }
             // Q & E are now disabled because this is a 2D maze, no up and down movement allowed.
@@ -219,19 +233,22 @@ namespace our
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position + right * (deltaTime * current_sensitivity.x);
                 bool collision = false;
+                bool foundCollectable = false;
                 auto it = world->getEntities().begin();
                 while (it != world->getEntities().end())
                 {
                     Entity *other_entity = *it;
                     if (other_entity != entity && other_entity->collision)
                     {
+                        if (other_entity->collectable) {
+                                foundCollectable = true;
+                            }
                         if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win))
                         {
                             collision = true;
                             if (other_entity->collectable)
                             {
-                                counter++;
-                                
+
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -244,6 +261,10 @@ namespace our
                 if (!collision)
                 {
                     position = new_position;
+                }
+                if (!foundCollectable)
+                {
+                    app->changeState("win");
                 }
             }
             if (app->getKeyboard().isPressed(GLFW_KEY_A))
@@ -258,19 +279,22 @@ namespace our
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position - right * (deltaTime * current_sensitivity.x);
                 bool collision = false;
+                bool foundCollectable = false;
                 auto it = world->getEntities().begin();
                 while (it != world->getEntities().end())
                 {
                     Entity *other_entity = *it;
                     if (other_entity != entity && other_entity->collision)
                     {
+                        if (other_entity->collectable) {
+                                foundCollectable = true;
+                            }
                         if (check_collision(new_position, other_entity->localTransform.position, other_entity->localTransform.scale, margin, other_entity->win))
                         {
                             collision = true;
                             if (other_entity->collectable)
                             {
-                                counter++;
-                                
+
                                 world->markForRemoval(other_entity);
                                 world->deleteMarkedEntities();
                                 it = world->getEntities().begin();
@@ -284,7 +308,7 @@ namespace our
                 {
                     position = new_position;
                 }
-                if(counter==3)
+                if (!foundCollectable)
                 {
                     app->changeState("win");
                 }
