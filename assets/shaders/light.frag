@@ -59,8 +59,8 @@ void main(){
     float material_ao = texture(material.ambient_occlusion, fs_in.tex_coord).r;
     
     // Initially the accumulated light will hold the ambient light and the emissive light (light coming out of the object).
-    vec3 accumulated_light = vec3(0.0);
-    // accumulated_light =material_emission + material_albedo * material_ao;
+    // vec3 accumulated_light = vec3(0.0);
+    vec3 accumulated_light =material_emission ;
     
     // Make sure that the actual light count never exceeds the maximum light count.
     int count = min(light_count, MAX_LIGHT_COUNT);
