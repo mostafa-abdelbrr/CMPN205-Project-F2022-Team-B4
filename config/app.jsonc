@@ -12,6 +12,7 @@
       "renderer": {
         "sky": "assets/textures/sky.jpg",
         "postprocess": "assets/shaders/postprocess/vignette.frag"
+        // "shakepostprocess": "assets/shaders/postprocess/shake.frag"
       },
       "assets": {
         "shaders": {
