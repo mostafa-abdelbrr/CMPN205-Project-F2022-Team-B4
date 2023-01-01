@@ -50,14 +50,26 @@ namespace our {
         // Then each of these elements are deleted.
         void deleteMarkedEntities(){
             //TODO: (Req 8) Remove and delete all the entities that have been marked for removal
+            auto it = markedForRemoval.begin();
+            while (it != markedForRemoval.end()) {
+                Entity * temp = *it;
+                entities.erase(temp);
+                delete *it;
+                it = markedForRemoval.erase(it);
+            }
             markedForRemoval.clear();
         }
 
         //This deletes all entities in the world
         void clear(){
             //TODO: (Req 8) Delete all the entites and make sure that the containers are empty
-            entities.clear();
             deleteMarkedEntities();
+            auto it = entities.begin();
+            while (it != entities.end()) {
+                // delete *it;
+                it = entities.erase(it);
+            }
+            entities.clear();
 
         }
 

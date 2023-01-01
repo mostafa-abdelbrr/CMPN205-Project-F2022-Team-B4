@@ -75,10 +75,10 @@ namespace our {
             //TODO: (Req 8) Go through the components list and find the first component that can be dynamically cast to "T*".
             // If found, delete the found component and remove it from the components list
             for (int index = 0; index < components.size(); index++) {
-                T* component = getComponent(index); //dynamic_cast<T*>(components[index]);
+                T* component = * getComponent<T*>(index); //dynamic_cast<T*>(components[index]);
                 if (component != nullptr) {
                     delete component;
-                    components.erase(index);
+                    components.erase(component);
                     return;
                 }
             }
@@ -99,32 +99,26 @@ namespace our {
         void deleteComponent(T const* component){
             //TODO: (Req 8) Go through the components list and find the given component "component".
             // If found, delete the found component and remove it from the components list
-            for (int index = 0; index < components.size(); index++) {
-                if (components[index] == component) {
+            int index = 0;
+            auto it = components.begin();
+            for (it = components.begin(); it != components.end(); it++) {
+                if (*it == component) {
                     deleteComponent(index);
+                    return;
                 }
+                std::advance(it, 1);
+                index++;
             }
         }
 
         // Since the entity owns its components, they should be deleted alongside the entity
         ~Entity(){
             //TODO: (Req 8) Delete all the components in "components".
-            auto it = components.begin();
-            if(*it != nullptr && (*it)->owner == this) {
-                delete *it;
-                components.erase(it);
+            auto component = components.begin();
+            while (component != components.end()) {
+                this->deleteComponent(*component);
+                component = components.begin();
             }
-            while(*it != nullptr) {
-                std::advance(it, 1);
-                if(*it != nullptr && (*it)->owner == this) {
-                    delete *it;
-                    components.erase(it);
-                }
-            }
-            // for (int index = 0; index < components.size(); index++) {
-            //     deleteComponent(index);
-            // }
-            // components.clear();
         }
 
         // Entities should not be copyable
