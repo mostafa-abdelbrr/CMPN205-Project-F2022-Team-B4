@@ -134,6 +134,7 @@ namespace our
                 // Pass the win data member to the collision check function to enable checking for win condition if the item is
                 // signifies the goal.
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
+                // If there is a collectable entity, then set the foundCollectable to true to indicate that the player hasn't won yet.
                 glm::vec3 new_position = position + front * (deltaTime * current_sensitivity.z);
                 bool collision = false;
                 bool foundCollectable = false;
@@ -165,6 +166,7 @@ namespace our
                 {
                     position = new_position;
                 }
+                // If no collectable was found, trigger the win state.
                 if (!foundCollectable)
                 {
                     app->changeState("win");
@@ -180,6 +182,7 @@ namespace our
                 // Pass the win data member to the collision check function to enable checking for win condition if the item is
                 // signifies the goal.
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
+                // If there is a collectable entity, then set the foundCollectable to true to indicate that the player hasn't won yet.
                 glm::vec3 new_position = position - front * (deltaTime * current_sensitivity.z);
                 bool collision = false;
                 bool foundCollectable = false;
@@ -211,6 +214,7 @@ namespace our
                 {
                     position = new_position;
                 }
+                // If no collectable was found, trigger the win state.
                 if (!foundCollectable)
                 {
                     app->changeState("win");
@@ -231,6 +235,7 @@ namespace our
                 // Pass the win data member to the collision check function to enable checking for win condition if the item is
                 // signifies the goal.
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
+                // If there is a collectable entity, then set the foundCollectable to true to indicate that the player hasn't won yet.
                 glm::vec3 new_position = position + right * (deltaTime * current_sensitivity.x);
                 bool collision = false;
                 bool foundCollectable = false;
@@ -262,6 +267,7 @@ namespace our
                 {
                     position = new_position;
                 }
+                // If no collectable was found, trigger the win state.
                 if (!foundCollectable)
                 {
                     app->changeState("win");
@@ -277,6 +283,7 @@ namespace our
                 // Pass the win data member to the collision check function to enable checking for win condition if the item is
                 // signifies the goal.
                 // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
+                // If there is a collectable entity, then set the foundCollectable to true to indicate that the player hasn't won yet.
                 glm::vec3 new_position = position - right * (deltaTime * current_sensitivity.x);
                 bool collision = false;
                 bool foundCollectable = false;
@@ -308,6 +315,7 @@ namespace our
                 {
                     position = new_position;
                 }
+                // If no collectable was found, trigger the win state.
                 if (!foundCollectable)
                 {
                     app->changeState("win");

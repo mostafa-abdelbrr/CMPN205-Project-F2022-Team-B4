@@ -281,6 +281,7 @@ namespace our {
             // glm::mat4 viewmat = camera->getViewMatrix(); // maybe? no lol
             glm::vec4 cameraTranslation = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
             // glm::vec4 translation = (cameraMatrix[3][0], cameraMatrix[3][1], cameraMatrix[3][2], cameraMatrix[3][3]);
+            // Get translation matrix from the above line and then use it to calculate the new camera position.
             glm::mat4 viewmat = glm::mat4(
                 1.0f, 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f, 0.0f,
