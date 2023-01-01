@@ -133,6 +133,9 @@ namespace our
                 // with collision set to false is the ground because otherwise it will always collide since it doesn't check
                 // in 3D, hence in 2D the object always collides.
                 // Only if no collision occurs with any entity, update the position.
+                // Pass the win data member to the collision check function to enable checking for win condition if the item is
+                // signifies the goal.
+                // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position + front * (deltaTime * current_sensitivity.z);
                 bool collision = false;
                 auto it = world->getEntities().begin();
@@ -154,6 +157,7 @@ namespace our
                     }
                     std::advance(it, 1);
                 }
+                // Update position if no collision or win state occured.
                 if (!collision)
                 {
                     position = new_position;
@@ -166,6 +170,9 @@ namespace our
                 // with collision set to false is the ground because otherwise it will always collide since it doesn't check
                 // in 3D, hence in 2D the object always collides.
                 // Only if no collision occurs with any entity, update the position.
+                // Pass the win data member to the collision check function to enable checking for win condition if the item is
+                // signifies the goal.
+                // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position - front * (deltaTime * current_sensitivity.z);
                 bool collision = false;
                 auto it = world->getEntities().begin();
@@ -187,6 +194,7 @@ namespace our
                     }
                     std::advance(it, 1);
                 }
+                // Update position if no collision or win state occured.
                 if (!collision)
                 {
                     position = new_position;
@@ -204,6 +212,9 @@ namespace our
                 // with collision set to false is the ground because otherwise it will always collide since it doesn't check
                 // in 3D, hence in 2D the object always collides.
                 // Only if no collision occurs with any entity, update the position.
+                // Pass the win data member to the collision check function to enable checking for win condition if the item is
+                // signifies the goal.
+                // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position + right * (deltaTime * current_sensitivity.x);
                 bool collision = false;
                 auto it = world->getEntities().begin();
@@ -225,6 +236,7 @@ namespace our
                     }
                     std::advance(it, 1);
                 }
+                // Update position if no collision or win state occured.
                 if (!collision)
                 {
                     position = new_position;
@@ -237,6 +249,9 @@ namespace our
                 // with collision set to false is the ground because otherwise it will always collide since it doesn't check
                 // in 3D, hence in 2D the object always collides.
                 // Only if no collision occurs with any entity, update the position.
+                // Pass the win data member to the collision check function to enable checking for win condition if the item is
+                // signifies the goal.
+                // Also check for collectable flag, if it is true then despawn the object, and do related game logic (update counter).
                 glm::vec3 new_position = position - right * (deltaTime * current_sensitivity.x);
                 bool collision = false;
                 auto it = world->getEntities().begin();
@@ -258,6 +273,7 @@ namespace our
                     }
                     std::advance(it, 1);
                 }
+                // Update position if no collision or win state occured.
                 if (!collision)
                 {
                     position = new_position;
