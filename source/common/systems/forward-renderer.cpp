@@ -279,7 +279,15 @@ namespace our {
             skyMaterial->setup();
             //TODO: (Req 10) Get the camera position
             // glm::mat4 viewmat = camera->getViewMatrix(); // maybe? no lol
-            glm::mat4 viewmat = camera->getOwner()->getLocalToWorldMatrix();
+            glm::vec4 cameraTranslation = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+            // glm::vec4 translation = (cameraMatrix[3][0], cameraMatrix[3][1], cameraMatrix[3][2], cameraMatrix[3][3]);
+            glm::mat4 viewmat = glm::mat4(
+                1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 1.0f
+            );
+            viewmat = glm::translate(viewmat, glm::vec3(cameraTranslation[0], cameraTranslation[1], cameraTranslation[2]));
             //TODO: (Req 10) Create a model matrix for the sky such that it always follows the camera (sky sphere center = camera position)
             glm::mat4 ModelMatrix = VP * viewmat;
             //TODO: (Req 10) We want the sky to be drawn behind everything (in NDC space, z=1)
