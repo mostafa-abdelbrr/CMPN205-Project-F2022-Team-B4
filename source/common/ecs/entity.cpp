@@ -34,6 +34,10 @@ namespace our {
         if(data.contains("win")){
             win = data.value("win", win);
         }
+        // Check if entity has a collectable flag which signifies if it is a collectable coin or not.
+        if(data.contains("collectable")){
+            collectable = data.value("collectable", collectable);
+        }
         if(data.contains("components")){
             if(const auto& components = data["components"]; components.is_array()){
                 for(auto& component: components){
